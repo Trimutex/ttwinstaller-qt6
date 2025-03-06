@@ -4,17 +4,17 @@ namespace TaleOfTwoWastelandsPatching {
     // NOTE: public class
     class PatchInfo {
     public:
-        FileValidation Metadata { get; set; }
-        byte[] Data { get; set; }
+        FileValidation m_metadata { get; set; }
+        byte[] m_data { get; set; }
 
         PatchInfo() { }
         PatchInfo(BinaryReader reader);
-        void WriteTo(BinaryWriter writer);
-        bool PatchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk);
-        bool PatchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk);
+        void writeTo(BinaryWriter writer);
+        bool patchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk);
+        bool patchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk);
 
 #if LEGACY || DEBUG
-        static PatchInfo FromOldDiff(byte[] diffData, FileValidation oldChk);
+        static PatchInfo fromOldDiff(byte[] diffData, FileValidation oldChk);
 #endif
 
     }

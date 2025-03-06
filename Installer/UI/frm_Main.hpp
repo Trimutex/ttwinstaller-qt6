@@ -8,16 +8,16 @@ namespace TaleOfTwoWastelandsUI {
         frm_Main();
 
     private:
-        CancellationTokenSource _installCts;
-        Task _installTask;
+        CancellationTokenSource _m_installCts;
+        Task _m_installTask;
 
-        ILog Log;
-        IInstaller _install;
-        IPrompts _prompts;
+        ILog m_log;
+        IInstaller _m_install;
+        IPrompts _m_prompts;
 
         void frm_Main_Load(object sender, EventArgs e);
-        void UpdateProgressBar(InstallStatus opProg, TextProgressBar bar);
-        void UpdateLog(string msg);
+        void updateProgressBar(InstallStatus opProg, TextProgressBar bar);
+        void updateLog(string msg);
         void btn_FO3Browse_Click(object sender, EventArgs e);
         void btn_FNVBrowse_Click(object sender, EventArgs e);
         void btn_TTWBrowse_Click(object sender, EventArgs e);

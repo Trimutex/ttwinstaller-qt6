@@ -3,24 +3,25 @@
 namespace TaleOfTwoWastelands {
     // NOTE: public class
     // NOTE: interface class
-	IInstaller {
-		string DirFO3Data { get; }
-		string DirFNVData { get; }
-		string DirTTWMain { get; }
-		string DirTTWOptional { get; }
+	class IInstaller {
+    public:
+		string m_dirFO3Data { get; }
+		string m_dirFNVData { get; }
+		string m_dirTTWMain { get; }
+		string m_dirTTWOptional { get; }
 
 		/// <summary>
 		/// Provides progress updates for minor operations
 		/// </summary>
-		IProgress<InstallStatus> ProgressMinorOperation { get; set; }
+		IProgress<InstallStatus> m_progressMinorOperation { get; set; }
 
 		/// <summary>
 		/// Provides progress updates for major operations
 		/// </summary>
-		IProgress<InstallStatus> ProgressMajorOperation { get; set; }
+		IProgress<InstallStatus> m_progressMajorOperation { get; set; }
 
-		CancellationToken Token { get; }
+		CancellationToken m_token { get; }
 
-		void Install(CancellationToken inToken);
+		void install(CancellationToken inToken);
 	}
 }

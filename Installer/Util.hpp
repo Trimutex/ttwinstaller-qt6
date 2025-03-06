@@ -4,28 +4,36 @@ namespace TaleOfTwoWastelands {
     // NOTE: public class
     static class Util {
     public:
-        #region GetMD5 overloads
-        static byte[] GetMD5(string file);
-        static byte[] GetMD5(Stream stream);
-        static byte[] GetMD5(byte[] buf);
-        static string MakeMD5String(byte[] md5);
-        static byte[] FromMD5String(string md5Str);
-        static string GetMD5String(string file);
-        static string GetMD5String(Stream stream);
-        static string GetMD5String(byte[] buf);
-        #endregion
+/* VESTIGIAL MACRO
+ *  #region GetMD5 overloads
+ */
+        static byte[] getMD5(string file);
+        static byte[] getMD5(Stream stream);
+        static byte[] getMD5(byte[] buf);
+        static string makeMD5String(byte[] md5);
+        static byte[] fromMD5String(string md5Str);
+        static string getMD5String(string file);
+        static string getMD5String(Stream stream);
+        static string getMD5String(byte[] buf);
+/* VESTIGIAL MACRO
+ *  #endregion
+ */
 
-        #region Legacy mode
+/* VESTIGIAL MACRO
+ *  #region Legacy mode
+ */
 #if LEGACY || DEBUG
-        static IDictionary<string, string> ReadOldDatabase(string path);
+        static IDictionary<string, string> readOldDatabase(string path);
 
-        static IEnumerable<Tuple<string, byte[]>> FindAlternateVersions(string file);
+        static IEnumerable<Tuple<string, byte[]>> findAlternateVersions(string file);
 #endif
-        #endregion
+/* VESTIGIAL MACRO
+ *  #endregion
+ */
 
-        static string Truncate(this string value, int maxLength);
-        static bool PatternSearch(Stream inStream, string pattern, out string result);
-        static void CopyFolder(string inFolder, string destFolder);
-        static void AssertElevated();
+        static string truncate(this string value, int maxLength);
+        static bool patternSearch(Stream inStream, string pattern, out string result);
+        static void copyFolder(string inFolder, string destFolder);
+        static void assertElevated();
     }
 }

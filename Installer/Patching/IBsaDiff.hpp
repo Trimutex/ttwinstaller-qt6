@@ -5,8 +5,8 @@ namespace TaleOfTwoWastelandsPatching {
     // NOTE: interface class
 	class IBsaDiff {
     public:
-		bool PatchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false);
-		bool PatchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk);
-		void RenameFiles(BSA bsa, IDictionary<string, string> renameDict);
+		bool patchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false);
+		bool patchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk);
+		void renameFiles(BSA bsa, IDictionary<string, string> renameDict);
 	}
 }

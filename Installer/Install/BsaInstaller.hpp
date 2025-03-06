@@ -27,9 +27,9 @@ namespace TaleOfTwoWastelandsInstaller {
         BsaInstaller(ILog log, IPrompts prompts, IBSADiff bsaDiff) :
             m_log(log), m_prompts(prompts), _m_bsaDiff(bsaDiff) {};
 
-        CompressionOptions GetOptionsOrDefault(std::string inBSA);
-        ErrorPromptResult Patch(CompressionOptions options, string inBsaFile, string inBsaPath, string outBsaPath);
-        void Extract(CancellationToken token, IEnumerable<BSAFolder> folders, string outBsa, string outBsaPath, bool skipExisting);
+        CompressionOptions getOptionsOrDefault(std::string inBSA);
+        ErrorPromptResult patch(CompressionOptions options, string inBsaFile, string inBsaPath, string outBsaPath);
+        void extract(CancellationToken token, IEnumerable<BSAFolder> folders, string outBsa, string outBsaPath, bool skipExisting);
 
 
     private:

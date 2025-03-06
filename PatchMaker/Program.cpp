@@ -2,7 +2,7 @@
 
 namespace PatchMaker {
     // NOTE: MAIN IS HERE
-    static void Main() {
+    static void main() {
         //BenchmarkHash.Run();
 
         if (!Debugger.IsAttached)
@@ -45,7 +45,7 @@ namespace PatchMaker {
     }
 
     // NOTE: originally unsafe
-    static byte[] GetDiff(string diffPath, long convertSignature = -1, bool moveToUsed = false) {
+    static byte[] getDiff(string diffPath, long convertSignature = -1, bool moveToUsed = false) {
         if (File.Exists(diffPath)) {
             try {
                 var diffBytes = File.ReadAllBytes(diffPath);
@@ -62,7 +62,7 @@ namespace PatchMaker {
         return null;
     }
 
-    static void BuildBsaPatch(string inBsaName, string outBsaName) {
+    static void buildBsaPatch(string inBsaName, string outBsaName) {
         string outBSAFile = Path.ChangeExtension(outBsaName, ".bsa");
         string outBSAPath = Path.Combine(_dirTTWMain, outBSAFile);
 
@@ -151,7 +151,7 @@ namespace PatchMaker {
             }
     }
 
-    static IDictionary<string, string> BuildRenameDict(string bsaName) {
+    static IDictionary<string, string> buildRenameDict(string bsaName) {
         var dictPath = Path.Combine(InDir, "TTW Patches", bsaName, "RenameFiles.dict");
         if (File.Exists(dictPath)) {
             var renameDict = Util.ReadOldDatabase(dictPath);
@@ -173,7 +173,7 @@ namespace PatchMaker {
         return new Dictionary<string, string>();
     }
 
-    static void BuildMasterPatch(string esm, ILookup<string, string> knownEsmVersions) {
+    static void buildMasterPatch(string esm, ILookup<string, string> knownEsmVersions) {
         var fixPath = Path.Combine(OutDir, Path.ChangeExtension(esm, ".pat"));
         if (File.Exists(fixPath))
             return;

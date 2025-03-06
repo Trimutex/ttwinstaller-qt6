@@ -6,16 +6,16 @@ namespace PatchMaker {
 
 	class Program {
     public:
-        static void Main();
-        static byte[] GetDiff(string diffPath, long convertSignature = -1, bool moveToUsed = false);
+        static void main();
+        static byte[] getDiff(string diffPath, long convertSignature = -1, bool moveToUsed = false);
 
     private:
-        const string InDir = "BuildDB";
-        const string OutDir = "OutDB";
-        static string _dirTTWMain, _dirTTWOptional, _dirFO3Data;
+        const string m_inDir = "BuildDB";
+        const string m_outDir = "OutDB";
+        static string _m_dirTTWMain, _m_dirTTWOptional, _m_dirFO3Data;
 
-        static void BuildBsaPatch(string inBsaName, string outBsaName);
-        static IDictionary<string, string> BuildRenameDict(string bsaName);
-        static void BuildMasterPatch(string esm, ILookup<string, string> knownEsmVersions);
+        static void buildBsaPatch(string inBsaName, string outBsaName);
+        static IDictionary<string, string> buildRenameDict(string bsaName);
+        static void buildMasterPatch(string esm, ILookup<string, string> knownEsmVersions);
     }
 }

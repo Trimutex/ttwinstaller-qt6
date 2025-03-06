@@ -4,14 +4,14 @@ namespace TaleOfTwoWastelands {
     // NOTE: internal class
     class Log : ILog {
     public:
-        IProgress<string> DisplayMessage { get; set; }
+        IProgress<string> m_displayMessage { get; set; }
         
-        void File(string msg, params object[] args);
-        void Display(string msg, params object[] args);
-        void Dual(string msg, params object[] args);
+        void file(string msg, params object[] args);
+        void display(string msg, params object[] args);
+        void dual(string msg, params object[] args);
 
     private:
-        static StringBuilder Timestamp;
+        static StringBuilder m_timestamp;
 
     }
 }

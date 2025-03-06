@@ -8,9 +8,9 @@ namespace TaleOfTwoWastelandsInstall {
     public:
         NVSE(string FNVPath, ILog log) : _m_fnvPath(FNVPath), m_log(log) {};
 
-        bool Check(void);
-        std::optional<bool> Prompt(void);
-        bool Install(std::string& err);
+        bool check(void);
+        std::optional<bool> prompt(void);
+        bool install(std::string& err);
 
     private:
         // TODO: read-only block

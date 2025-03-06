@@ -4,7 +4,7 @@ namespace TaleOfTwoWastelandsProgress {
     // NOTE: public class
     // NOTE: interface class
     IProgress<in T> {
-        void Report(T value);
+        void report(T value);
     }
 
     /// <summary>
@@ -28,17 +28,17 @@ namespace TaleOfTwoWastelandsProgress {
  *  [Serializable]
  *  [ComVisible(true)]
  */
-        delegate void GenericEventHandler<P>(Object sender, P e);
+        delegate void genericEventHandler<P>(Object sender, P e);
 
         /// <summary>Raised for each reported progress value.</summary>
         /// <remarks>
         /// Handlers registered with this event will be invoked on the 
         /// <see cref="System.Threading.SynchronizationContext"/> captured when the instance was constructed.
         /// </remarks>
-        event GenericEventHandler<T> ProgressChanged;
+        event genericEventHandler<T> m_ProgressChanged;
 
     protected:
-        virtual void OnReport(T value);
+        virtual void onReport(T value);
 
     private:
         // NOTE: read-only block
@@ -49,9 +49,9 @@ namespace TaleOfTwoWastelandsProgress {
         /// <summary>A cached delegate used to post invocation to the synchronization context.</summary>
         SendOrPostCallback m_invokeHandlers;
 
-        void IProgress<T>.Report(T value);
+        void IProgress<T>.report(T value);
 
-        void InvokeHandlers(object state);
+        void invokeHandlers(object state);
     }
 
     /// <summary>Holds static values for <see cref="Progress{T}"/>.</summary>
@@ -61,6 +61,6 @@ namespace TaleOfTwoWastelandsProgress {
         /// <summary>A default synchronization context that targets the ThreadPool.</summary>
         // NOTE: originally internal
         // NOTE: read-only block
-        static SynchronizationContext DefaultContext = new SynchronizationContext();
+        static SynchronizationContext m_defaultContext = new SynchronizationContext();
     }
 }

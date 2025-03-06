@@ -6,20 +6,20 @@ namespace TaleOfTwoWastelands {
     public:
         FinalizedTextWriter(string path);
 
-        override void Write(char[] buffer, int index, int count);
+        override void write(char[] buffer, int index, int count);
 
-        override Encoding Encoding;
+        override Encoding m_encoding;
 
     private:
         // NOTE: read-only block
-        Crc32 _checksum = new Crc32();
-        int _checksumSize;
-        FileStream _stream;
+        Crc32 _m_checksum = new Crc32();
+        int _m_checksumSize;
+        FileStream _m_stream;
 
-        string Checksum;
+        string m_checksum;
 
-        byte[] UpdateChecksum(char[] s);
+        byte[] updateChecksum(char[] s);
 
-        bool _writingChecksum;
+        bool _m_writingChecksum;
     }
 }

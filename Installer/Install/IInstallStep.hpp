@@ -4,6 +4,6 @@
 
 namespace TaleOfTwoWastelandsInstall {
 	interface IInstallStep {
-        std::<optional> bool Run(IInstallStatusUpdate status, CancellationToken token);
+        std::<optional> bool run(IInstallStatusUpdate status, CancellationToken token);
 	}
 }

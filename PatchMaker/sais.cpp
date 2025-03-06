@@ -10,7 +10,7 @@ namespace PatchMaker {
     /// <param name="SA">output suffix array</param>
     /// <param name="n">length of the given string</param>
     /// <returns>0 if no error occurred, -1 or -2 otherwise</returns>
-    static int[] sufsort(byte[] T) {
+    static int[] sufSort(byte[] T) {
         if (T == null)
             throw new ArgumentNullException("T");
 
@@ -59,7 +59,7 @@ namespace PatchMaker {
     }
 
     /* sort all type LMS suffixes */
-    static void LMSsort(IList<int> T, int[] SA, IList<int> C, IList<int> B, int n, int k) {
+    static void lmsSort(IList<int> T, int[] SA, IList<int> C, IList<int> B, int n, int k) {
         int b, i, j;
         int c0, c1;
 
@@ -99,7 +99,7 @@ namespace PatchMaker {
         }
     }
 
-    static int LMSpostproc(IList<int> T, int[] SA, int n, int m) {
+    static int lmsPostProc(IList<int> T, int[] SA, int n, int m) {
         int i, j, p, q, plen, qlen, name;
         int c0, c1;
         bool diff;
@@ -366,62 +366,59 @@ namespace PatchMaker {
         _buffer = buf;
     }
 
-    int IndexOf(int item) {
+    int indexOf(int item) {
         throw new NotImplementedException();
     }
 
-    void Insert(int index, int item) {
+    void insert(int index, int item) {
         throw new NotImplementedException();
     }
 
-    void RemoveAt(int index) {
+    void removeAt(int index) {
         throw new NotImplementedException();
     }
 
-    int this[int index] {
-        get
-        {
-            return _buffer[index];
-        }
-        set
-        {
-            _buffer[index] = (byte)value;
-        }
+    int getThis(int index) {
+        return _m_buffer[index];
     }
 
-    void Add(int item) {
+    void setThis(int index, int value) {
+        _m_buffer[index] = (byte)value;
+    }
+
+    void add(int item) {
         throw new NotImplementedException();
     }
 
-    void Clear() {
+    void clear() {
         throw new NotImplementedException();
     }
 
-    bool Contains(int item) {
+    bool contains(int item) {
         throw new NotImplementedException();
     }
 
-    void CopyTo(int[] array, int arrayIndex) {
+    void copyTo(int[] array, int arrayIndex) {
         throw new NotImplementedException();
     }
 
-    int Count {
+    int count {
         get { return _buffer.Length; }
     }
 
-    bool IsReadOnly {
+    bool isReadOnly {
         get { return false; }
     }
 
-    bool Remove(int item) {
+    bool remove(int item) {
         throw new NotImplementedException();
     }
 
-    IEnumerator<int> GetEnumerator() {
+    IEnumerator<int> getEnumerator() {
         throw new NotImplementedException();
     }
 
-    IEnumerator IEnumerable.GetEnumerator() {
+    IEnumerator IEnumerable.getEnumerator() {
         throw new NotImplementedException();
     }
 }

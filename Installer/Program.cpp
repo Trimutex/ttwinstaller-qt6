@@ -2,7 +2,7 @@
 
 namespace TaleOfTwoWastelands {
 
-    static bool VerifyElevation() {
+    static bool verifyElevation() {
         var identity = WindowsIdentity.GetCurrent();
         Debug.Assert(identity != null, "identity != null");
 
@@ -15,7 +15,7 @@ namespace TaleOfTwoWastelands {
     /// </summary>
     [STAThread]
         // NOTE: MAIN IS HERE
-        static void Main() {
+        static void main() {
             SetupTraceListeners();
 
             Application.ThreadException += Application_ThreadException;
@@ -27,7 +27,7 @@ namespace TaleOfTwoWastelands {
             Application.Run(new UI.frm_Main());
         }
 
-    static void SetupTraceListeners() {
+    static void setupTraceListeners() {
         Directory.CreateDirectory(LogDirectory);
 
         var LogFilename = "Install Log " + DateTime.Now.ToString("MM_dd_yyyy - HH_mm_ss") + ".txt";
@@ -37,15 +37,15 @@ namespace TaleOfTwoWastelands {
         Trace.Listeners.Add(new TextWriterTraceListener(new FinalizedTextWriter(LogFilepath)));
     }
 
-    static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e) {
+    static void application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e) {
         HandleCrashException(e.Exception);
     }
 
-    static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+    static void currentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
         HandleCrashException((Exception)e.ExceptionObject);
     }
 
-    static void HandleCrashException(Exception e) {
+    static void handleCrashException(Exception e) {
         Trace.WriteLine("An uncaught exception occurred: " + e);
         MessageBox.Show(Localization.UncaughtExceptionMessage);
         Environment.Exit(1);
