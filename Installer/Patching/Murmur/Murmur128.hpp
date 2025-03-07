@@ -1,17 +1,20 @@
 #pragma once
 
 namespace TaleOfTwoWastelandsPatchingMurmur {
-    public abstract class Murmur128 : HashAlgorithm {
+
+    // NOTE: originally public
+    // NOTE: originally abstract
+    class Murmur128 : HashAlgorithm {
     public:
-        uint Seed(void);
-        static Murmur128 CreateMurmur(void);
+        uint seed(void);
+        static Murmur128 createMurmur(void);
 
     protected:
         Murmur128(uint seed) : _m_seed(seed);
 
     private:
         // TODO: read-only block
-        private readonly uint _m_seed;
+        uint _m_seed;
 
     };
 }

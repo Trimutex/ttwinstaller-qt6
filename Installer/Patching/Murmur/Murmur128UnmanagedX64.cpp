@@ -5,17 +5,17 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         Reset();
     }
 
-    void Murmur128UnmanagedX64::Initialize(void) {
+    void Murmur128UnmanagedX64::initialize(void) {
         Reset();
     }
 
-    void Murmur128UnmanagedX64::HashCore(byte[] array, int ibStart, int cbSize) {
+    void Murmur128UnmanagedX64::hashCore(byte[] array, int ibStart, int cbSize) {
         // store the length of the hash (for use later)
         Length += cbSize;
         Body(array, ibStart, cbSize);
     }
 
-    override byte[] Murmur128UnmanagedX64::HashFinal(void) {
+    override byte[] Murmur128UnmanagedX64::hashFinal(void) {
         var len = (ulong)Length;
         H1 ^= len; H2 ^= len;
 
@@ -40,7 +40,7 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         return result;
     }
 
-    void Murmur128UnmanagedX64::Tail(byte* tail, int remaining) {
+    void Murmur128UnmanagedX64::tail(byte* tail, int remaining) {
         // create our keys and initialize to 0
         ulong k1 = 0, k2 = 0;
 
@@ -67,13 +67,13 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         H1 ^= (k1 * C1).RotateLeft(31) * C2;
     }
 
-    void Murmur128UnmanagedX64::Reset(void) {
+    void Murmur128UnmanagedX64::reset(void) {
         // initialize hash values to seed values
         H1 = H2 = Seed;
         Length = 0;
     }
 
-    void Murmur128UnmanagedX64::Body(byte[] data, int start, int length) {
+    void Murmur128UnmanagedX64::body(byte[] data, int start, int length) {
         if (length == 0)
             return;
 

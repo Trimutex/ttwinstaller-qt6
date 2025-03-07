@@ -9,9 +9,9 @@ namespace TaleOfTwoWastelandsPatching {
             Murmur128,
             Md5
         }
-        uint Filesize { get; private set; }
-        byte[] Checksum { get { return _computeChecksum.Value; } }
-        ChecksumType Type { get; private set; }
+        uint m_filesize { get; private set; }
+        byte[] m_checksum { get { return _computeChecksum.Value; } }
+        ChecksumType m_type { get; private set; }
 
         // NOTE: read-only block
         Stream _stream;
@@ -26,19 +26,19 @@ namespace TaleOfTwoWastelandsPatching {
             : this(File.OpenRead(path), type) { };
 
         ~FileValidation();
-        void Dispose();
-        override string ToString();
-        override bool Equals(object obj);
-        bool Equals(FileValidation obj)
+        void dispose();
+        override string toString();
+        override bool equals(object obj);
+        bool equals(FileValidation obj)
         static bool operator ==(FileValidation a, FileValidation b)
         static bool operator !=(FileValidation a, FileValidation b)
-        static Dictionary<string, FileValidation> FromBSA(BSA bsa)
-        static FileValidation FromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128)
-        static FileValidation ReadFrom(BinaryReader reader)
-        static void WriteTo(BinaryWriter writer, FileValidation fv)
+        static Dictionary<string, FileValidation> fromBSA(BSA bsa)
+        static FileValidation fromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128)
+        static FileValidation readFrom(BinaryReader reader)
+        static void writeTo(BinaryWriter writer, FileValidation fv)
 
     protected:
-        virtual void Dispose(bool disposing);
+        virtual void dispose(bool disposing);
 
     private:
 /* VESTIGIAL MACRO
@@ -47,8 +47,8 @@ namespace TaleOfTwoWastelandsPatching {
         static extern int memcmp(byte[] b1, byte[] b2, UIntPtr count);
 
         FileValidation(BinaryReader reader, byte typeByte);
-        void SetContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type);
-        void WriteTo(BinaryWriter writer);
-        HashAlgorithm GetHash();
+        void setContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type);
+        void writeTo(BinaryWriter writer);
+        HashAlgorithm getHash();
     }
 }

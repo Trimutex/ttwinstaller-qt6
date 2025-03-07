@@ -1,11 +1,11 @@
 ﻿#include "Murmur128.hpp"
 
 namespace TaleOfTwoWastelandsPatchingMurmur {
-    uint Seed(void) {
+    uint seed(void) {
         return _m_seed;
     }
 
-    static Murmur128 CreateMurmur(void) {
+    static Murmur128 createMurmur(void) {
         return new Murmur128UnmanagedX64();
     }
 }

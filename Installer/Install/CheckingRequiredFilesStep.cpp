@@ -2,7 +2,7 @@
 
 
 namespace TaleOfTwoWastelandsInstall {
-    std::optional<bool> CheckingRequiredFilesStep::Run(IInstallStatusUpdate status, CancellationToken token) {
+    std::optional<bool> CheckingRequiredFilesStep::run(IInstallStatusUpdate status, CancellationToken token) {
 			status.CurrentOperation = Localization.CheckingRequiredFiles;
 
 			if (CheckFiles()) {
@@ -15,7 +15,7 @@ namespace TaleOfTwoWastelandsInstall {
 				return false;
 			}
     }
-    bool CheckingRequiredFilesStep::CheckFiles(void) {
+    bool CheckingRequiredFilesStep::checkFiles(void) {
         bool fileCheck = true;
 
         Log.Dual(Localization.CheckingRequiredFiles);

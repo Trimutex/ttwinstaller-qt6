@@ -3,12 +3,11 @@
 
 namespace TaleOfTwoWastelandsInstall
 {
-	class BuildBsasStep : IInstallStep
-	{
+	class BuildBsasStep : IInstallStep {
     public:
 		BuildBsasStep(IInstaller installer, IPrompts prompts) :
             _m_installer(installer), _m_prompts(prompts) {};
-        std::optional<bool> Run(IInstallStatusUpdate status, CancellationToken token);
+        std::optional<bool> run(IInstallStatusUpdate status, CancellationToken token);
 
     private:
 		IInstaller _m_installer;

@@ -4,13 +4,12 @@
 
 namespace TaleOfTwoWastelandsInstall
 {
-	class CheckingRequiredFilesStep : IInstallStep
-	{
+	class CheckingRequiredFilesStep : IInstallStep {
     public:
 		CheckingRequiredFilesStep(IInstaller installer, ILog log)
             : m_log(log), _m_installer(installer) {};
 
-        std::optional<bool> Run(IInstallStatusUpdate status, CancellationToken token);
+        std::optional<bool> run(IInstallStatusUpdate status, CancellationToken token);
 
     private:
         // TODO: read-only block
@@ -18,6 +17,6 @@ namespace TaleOfTwoWastelandsInstall
 		ILog m_log;
 
 
-		bool CheckFiles(void);
+		bool checkFiles(void);
 	}
 }

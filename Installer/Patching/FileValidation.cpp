@@ -39,20 +39,20 @@ namespace TaleOfTwoWastelandsPatching {
             Dispose(false);
         }
 
-        void Dispose() {
+        void dispose() {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        override string ToString() {
+        override string toString() {
             return string.Format("({0}, {1} bytes, {2})", BitConverter.ToString(Checksum), Filesize, Enum.GetName(typeof(ChecksumType), Type));
         }
 
-        override bool Equals(object obj) {
+        override bool equals(object obj) {
             return Equals(obj as FileValidation);
         }
 
-        bool Equals(FileValidation obj) {
+        bool equals(FileValidation obj) {
             if (obj == null)
                 return false;
 
@@ -79,18 +79,18 @@ namespace TaleOfTwoWastelandsPatching {
             return !(a == b);
         }
 
-        static Dictionary<string, FileValidation> FromBSA(BSA bsa) {
+        static Dictionary<string, FileValidation> fromBSA(BSA bsa) {
             return bsa
                 .SelectMany(folder => folder)
                 .ToDictionary(file => file.Filename, file => FromBSAFile(file));
         }
 
-        static FileValidation FromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128) {
+        static FileValidation fromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128) {
             return new FileValidation(file.GetContents(true), asType);
         }
         
         // NOTE: originally internal
-        static FileValidation ReadFrom(BinaryReader reader) {
+        static FileValidation readFrom(BinaryReader reader) {
             var typeByte = reader.ReadByte();
             if (typeByte != byte.MaxValue)
                 return new FileValidation(reader, typeByte);
@@ -99,14 +99,14 @@ namespace TaleOfTwoWastelandsPatching {
         }
 
         // NOTE: originally internal
-        static void WriteTo(BinaryWriter writer, FileValidation fv) {
+        static void writeTo(BinaryWriter writer, FileValidation fv) {
             if (fv != null)
                 fv.WriteTo(writer);
             else
                 writer.Write(byte.MaxValue);
         }
 
-        virtual void Dispose(bool disposing) {
+        virtual void dispose(bool disposing) {
             if (disposing) {
                 if (_stream != null)
                     _stream.Dispose();
@@ -128,19 +128,19 @@ namespace TaleOfTwoWastelandsPatching {
             SetContents(() => checksum, filesize, type);
         }
 
-        void SetContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type) {
+        void setContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type) {
             _computeChecksum = new Lazy<byte[]>(getChecksum);
             Filesize = filesize;
             Type = type;
         }
 
-        void WriteTo(BinaryWriter writer) {
+        void writeTo(BinaryWriter writer) {
             writer.Write((byte)Type);
             writer.Write(Filesize);
             writer.Write(Checksum);
         }
 
-        HashAlgorithm GetHash() {
+        HashAlgorithm getHash() {
             switch (Type) {
                 case ChecksumType.Murmur128:
                     return Murmur128.CreateMurmur();
