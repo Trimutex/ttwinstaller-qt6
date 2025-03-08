@@ -1,17 +1,18 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelands {
     // NOTE: internal class
     class Log : ILog {
     public:
-        IProgress<string> m_displayMessage { get; set; }
+        IProgress<std::string> m_displayMessage { get; set; }
         
-        void file(string msg, params object[] args);
-        void display(string msg, params object[] args);
-        void dual(string msg, params object[] args);
+        void file(std::string msg, params object[] args);
+        void display(std::string msg, params object[] args);
+        void dual(std::string msg, params object[] args);
 
     private:
-        static StringBuilder m_timestamp;
-
+        std::string timestamp(void);
     }
 }

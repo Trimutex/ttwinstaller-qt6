@@ -5,6 +5,9 @@ namespace TaleOfTwoWastelands {
 /* VESTIGIAL MACRO
  *  #region GetMD5 overloads
  */
+        // NOTE: byte[] is an 8-bit **unsigned** integer
+        // TODO: Replace ComputeHash() and co to openssl library
+        //       ... also add openssl library
         static byte[] getMD5(string file) {
             using (var stream = File.OpenRead(file))
                 return GetMD5(stream);
@@ -51,7 +54,10 @@ namespace TaleOfTwoWastelands {
  *  #region Legacy mode
  */
         
-#if LEGACY || DEBUG
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY || DEBUG
+ */
         static IDictionary<string, string> readOldDatabase(string path) {
             Debug.Assert(File.Exists(path));
 
@@ -59,6 +65,8 @@ namespace TaleOfTwoWastelands {
                 return (IDictionary<string, string>)new BinaryFormatter().Deserialize(stream);
         }
 
+        // NOTE: simple iteration over a non-generic collection
+        //      tldr; enumeration over tuples of string && byte[]
         static IEnumerable<Tuple<string, byte[]>> findAlternateVersions(string file) {
             var justName = Path.GetFileName(file);
             var split = justName.Split('.');

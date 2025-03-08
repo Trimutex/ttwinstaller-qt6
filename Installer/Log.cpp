@@ -2,37 +2,30 @@
 
 namespace TaleOfTwoWastelands {
 
-    IProgress<string> DisplayMessage { get; set; }
+    IProgress<std::string> DisplayMessage { get; set; }
 
-    void file(string msg, params object[] args) {
-        Trace.Write(Timestamp);
+    void file(std::string msg, params object[] args) {
+        Trace.Write(timestamp());
         Trace.WriteLine(string.Format(msg, args));
     }
 
-    void display(string msg, params object[] args) {
+    void display(std::string msg, params object[] args) {
         Debug.Assert(DisplayMessage != null, "shouldn't call Display before setting DisplayMessage");
 
         var displayProg = DisplayMessage;
         if (displayProg != null) {
-            var sb = Timestamp.AppendFormat(msg, args);
+            var sb = timestamp() + msg + args;
             displayProg.Report(sb.ToString());
         }
     }
 
-    void dual(string msg, params object[] args) {
+    void dual(std::string msg, params object[] args) {
         File(msg, args);
         Display(msg, args);
     }
 
-    static StringBuilder Timestamp {
-        get
-        {
-            return new StringBuilder()
-                .Clear()
-                .Append('[')
-                .Append(DateTime.Now)
-                .Append(']')
-                .Append('\t');
-        }
+    std::string timestamp(void) {
+        // TODO: use actual current time
+        return "[" + DateTime.Now + "]\t";
     }
 }
