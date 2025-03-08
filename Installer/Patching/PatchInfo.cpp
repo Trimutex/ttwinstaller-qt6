@@ -16,7 +16,7 @@ namespace TaleOfTwoWastelandsPatching {
             Data = reader.ReadBytes((int)dataSize);
     }
 
-    void WriteTo(BinaryWriter writer) {
+    void writeTo(BinaryWriter writer) {
         FileValidation.WriteTo(writer, Metadata);
 
         if (Data != null) {
@@ -27,7 +27,7 @@ namespace TaleOfTwoWastelandsPatching {
             writer.Write(0U);
     }
 
-    bool PatchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk) {
+    bool patchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk) {
         using (var output = new MemoryStream()) {
             // NOTE: originally unsafe
             fixed (byte* pInput = inputBytes)
@@ -43,7 +43,7 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-    bool PatchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk) {
+    bool patchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk) {
         // NOTE: originally unsafe
         fixed (byte* pPatch = Data)
             Diff.Apply(input, pPatch, Data.LongLength, output);
@@ -54,12 +54,16 @@ namespace TaleOfTwoWastelandsPatching {
         return targetChk == outputChk;
     }
 
-#if LEGACY || DEBUG
+/* VESTIGIAL MACRO
+ *  #if LEGACY || DEBUG
+ */
     static PatchInfo FromOldDiff(byte[] diffData, FileValidation oldChk) {
         return new PatchInfo {
             Metadata = oldChk,
                      Data = diffData
         };
     }
-#endif
+/* VESTIGIAL MACRO
+ *  #endif
+ */
 }

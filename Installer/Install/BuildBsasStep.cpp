@@ -1,7 +1,7 @@
 ﻿#include "BuildBsasStep.hpp"
 
 namespace TaleOfTwoWastelandsInstall {
-    std::optional<bool> BuildBsasStep::Run(IInstallStatusUpdate status, CancellationToken token) {
+    std::optional<bool> BuildBsasStep::run(IInstallStatusUpdate status, CancellationToken token) {
         foreach (var kvp in Game.BuildableBSAs) {
             if (token.IsCancellationRequested)
                 return false;

@@ -5,7 +5,7 @@ namespace TaleOfTwoWastelandsUI {
             InitializeComponent();
         }
 
-        void frm_Main_Load(object sender, EventArgs e) {
+        void fromMainLoad(object sender, EventArgs e) {
             Util.AssertElevated();
 
             Log = DependencyRegistry.Container.GetInstance<ILog>();
@@ -26,33 +26,33 @@ namespace TaleOfTwoWastelandsUI {
             _install.ProgressMinorOperation = new Progress<InstallStatus>(m => UpdateProgressBar(m, prgCurrent));
         }
 
-        void UpdateProgressBar(InstallStatus opProg, TextProgressBar bar) {
+        void updateProgressBar(InstallStatus opProg, TextProgressBar bar) {
             bar.Maximum = opProg.ItemsTotal;
             bar.Value = opProg.ItemsDone;
             bar.CustomText = opProg.CurrentOperation;
         }
 
-        void UpdateLog(string msg) {
+        void updateLog(string msg) {
             txt_Progress.AppendText(msg);
             txt_Progress.AppendText(Environment.NewLine);
         }
 
-        void btn_FO3Browse_Click(object sender, EventArgs e) {
+        void buttonFO3BrowseOnClick(object sender, EventArgs e) {
             _prompts.Fallout3Prompt(true);
             txt_FO3Location.Text = _prompts.Fallout3Path;
         }
 
-        void btn_FNVBrowse_Click(object sender, EventArgs e) {
+        void buttonFNVBrowseOnClick(object sender, EventArgs e) {
             _prompts.FalloutNVPrompt(true);
             txt_FNVLocation.Text = _prompts.FalloutNVPath;
         }
 
-        void btn_TTWBrowse_Click(object sender, EventArgs e) {
+        void buttonTTWBrowseOnClick(object sender, EventArgs e) {
             _prompts.TTWPrompt(true);
             txt_TTWLocation.Text = _prompts.TTWSavePath;
         }
 
-        void btn_Install_Click(object sender, EventArgs e) {
+        void buttonInstallOnClick(object sender, EventArgs e) {
             Action resetInstallBtn = () => {
                 btn_Install.Text = Localization.Install;
                 btn_Install.Enabled = true;
@@ -77,7 +77,7 @@ namespace TaleOfTwoWastelandsUI {
             }
         }
 
-        void chkYou_CheckedChanged(object sender, EventArgs e) {
+        void checkYouCheckedChanged(object sender, EventArgs e) {
             var checkbox = (sender as CheckBox);
             Debug.Assert(checkbox != null, "checkbox != null");
 

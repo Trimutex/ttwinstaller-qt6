@@ -2,7 +2,7 @@
 
 namespace TaleOfTwoWastelandsPatching {
 
-    void WriteAll(Stream outStream) {
+    void writeAll(Stream outStream) {
         using (var writer = new BinaryWriter(outStream)) {
             writer.Write(Count);
             foreach (var kvp in this) {
@@ -12,8 +12,11 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-#if LEGACY
-    static PatchDict FromOldDatabase(IDictionary<string, string> oldDict, string prefix, Func<byte[], byte[]> convertPatch) {
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY
+ */
+    static PatchDict fromOldDatabase(IDictionary<string, string> oldDict, string prefix, Func<byte[], byte[]> convertPatch) {
         Debug.Assert(oldDict != null);
         var patchDict = new PatchDict(oldDict.Count);
 
@@ -46,7 +49,10 @@ namespace TaleOfTwoWastelandsPatching {
 
         return patchDict;
     }
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
 
     PatchDict(BinaryReader reader, int size) : this(size) {
         using (reader) {
@@ -59,7 +65,7 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-    Patch ReadPatches(BinaryReader reader) {
+    Patch readPatches(BinaryReader reader) {
         var target = FileValidation.ReadFrom(reader);
 
         var patchCount = reader.ReadInt32();
@@ -70,7 +76,7 @@ namespace TaleOfTwoWastelandsPatching {
         return new Patch(target, patches);
     }
 
-    byte[] WritePatches(Patch patch) {
+    byte[] writePatches(Patch patch) {
         using (var ms = new MemoryStream())
             using (var writer = new BinaryWriter(ms)) {
                 FileValidation.WriteTo(writer, patch.Item1);

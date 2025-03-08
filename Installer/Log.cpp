@@ -4,12 +4,12 @@ namespace TaleOfTwoWastelands {
 
     IProgress<string> DisplayMessage { get; set; }
 
-    void File(string msg, params object[] args) {
+    void file(string msg, params object[] args) {
         Trace.Write(Timestamp);
         Trace.WriteLine(string.Format(msg, args));
     }
 
-    void Display(string msg, params object[] args) {
+    void display(string msg, params object[] args) {
         Debug.Assert(DisplayMessage != null, "shouldn't call Display before setting DisplayMessage");
 
         var displayProg = DisplayMessage;
@@ -19,7 +19,7 @@ namespace TaleOfTwoWastelands {
         }
     }
 
-    public void Dual(string msg, params object[] args) {
+    void dual(string msg, params object[] args) {
         File(msg, args);
         Display(msg, args);
     }

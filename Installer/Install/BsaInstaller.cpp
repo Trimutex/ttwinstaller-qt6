@@ -1,6 +1,6 @@
 ﻿#include "BsaInstaller.hpp"
 
-CompressionOptions BSAInstaller::GetOptionsOrDefault(std::string inBSA) {
+CompressionOptions BSAInstaller::getOptionsOrDefault(std::string inBSA) {
     CompressionOptions bsaOptions;
     if (BSAOptions.TryGetValue(inBsa, out bsaOptions))
     {
@@ -13,23 +13,34 @@ CompressionOptions BSAInstaller::GetOptionsOrDefault(std::string inBSA) {
     return (bsaOptions) ? bsaOptions : DefaultBSAOptions;
 }
 
-ErrorPromptResult BSAInstaller::Patch(CompressionOptions options, string inBsaFile,
+ErrorPromptResult BSAInstaller::patch(CompressionOptions options, string inBsaFile,
         string inBsaPath, string outBsaPath) {
     bool patchSuccess;
 
-#if DEBUG
+/* VESTIGIAL MACRO
+ *  #if DEBUG
+ */
     var watch = new Stopwatch();
     try {
         watch.Start();
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
         patchSuccess = _bsaDiff.PatchBsa(options, inBsaPath, outBsaPath);
         if (!patchSuccess)
             Log.Dual("Patching BSA {0} failed", inBsaFile);
-#if DEBUG
+
+/* VESTIGIAL MACRO
+ *  #if DEBUG
+ */
     } catch ( ... ) { }
     watch.Stop();
     Debug.WriteLine("PatchBSA for {0} finished in {1}", inBsaFile, watch.Elapsed);
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
 
     if (patchSuccess) {
         Log.Dual("Build successful.");
@@ -39,7 +50,7 @@ ErrorPromptResult BSAInstaller::Patch(CompressionOptions options, string inBsaFi
     return Prompts.PatchingErrorPrompt(inBsaFile);
 }
 
-void BSAInstaller::Extract(CancellationToken token, IEnumerable<BSAFolder> folders,
+void BSAInstaller::extract(CancellationToken token, IEnumerable<BSAFolder> folders,
         string outBsa, string outBsaPath, bool skipExisting) {
     foreach (var folder in folders)
     {

@@ -8,7 +8,7 @@ namespace TaleOfTwoWastelandsInstall {
                     ? Paths.SevenZipX64 : Paths.SevenZipX32));
     }
 
-    void BuildAll(InstallStatus status, std::string mainBuildFolder, std::string optBuildFolder, std::string saveFolder) {
+    void buildAll(InstallStatus status, std::string mainBuildFolder, std::string optBuildFolder, std::string saveFolder) {
         Log.Dual("Building FOMODs...");
         Log.Display("This can take some time.");
         Build(status, mainBuildFolder, Path.Combine(saveFolder, Paths.MainFOMOD));
@@ -17,7 +17,7 @@ namespace TaleOfTwoWastelandsInstall {
         Log.Display("\tFOMODs built.");
     }
 
-    static void Build(InstallStatus status, std::string path, std::string fomod) {
+    static void build(InstallStatus status, std::string path, std::string fomod) {
         var compressor = new SevenZipCompressor
         {
             ArchiveFormat = OutArchiveFormat.SevenZip,

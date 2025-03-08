@@ -1,7 +1,7 @@
 ﻿#include "BenchmarkHash.hpp"
 
 namespace PatchMaker {
-    static void Run() {
+    static void run() {
         const int iterations = 0x20000;
         const int testSize = 0x10000;
 

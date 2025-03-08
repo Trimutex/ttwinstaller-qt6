@@ -1,7 +1,7 @@
 ﻿#include "NVSE.hpp"
 
 namespace TaleOfTwoWastelandsInstall {
-    bool NVSE::Check(void) {
+    bool NVSE::check(void) {
         var nvseLoader = Path.Combine(_fnvPath, Paths.NvseFile);
         if (File.Exists(nvseLoader)) {
             Log.File(Localization.NvseFound);
@@ -12,7 +12,7 @@ namespace TaleOfTwoWastelandsInstall {
         return false;
     }
 
-    std::optional<bool> NVSE::Prompt(void) {
+    std::optional<bool> NVSE::prompt(void) {
         var dlgResult = MessageBox.Show(Localization.NvseInstallPrompt, Localization.NvseMissing, MessageBoxButtons.YesNoCancel);
         switch (dlgResult) {
             case DialogResult.Yes:
@@ -29,7 +29,7 @@ namespace TaleOfTwoWastelandsInstall {
         return null;
     }
 
-    bool NVSE::Install(std::string& err) {
+    bool NVSE::install(std::string& err) {
         err = null;
 
         using (var wc = new WebClient()) {

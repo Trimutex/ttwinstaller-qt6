@@ -1,28 +1,31 @@
 ﻿#include "Util.hpp"
 
 namespace TaleOfTwoWastelands {
-        #region GetMD5 overloads
-        static byte[] GetMD5(string file) {
+        
+/* VESTIGIAL MACRO
+ *  #region GetMD5 overloads
+ */
+        static byte[] getMD5(string file) {
             using (var stream = File.OpenRead(file))
                 return GetMD5(stream);
         }
 
-        static byte[] GetMD5(Stream stream) {
+        static byte[] getMD5(Stream stream) {
             using (var fileHash = MD5.Create())
             using (stream)
                 return fileHash.ComputeHash(stream);
         }
 
-        static byte[] GetMD5(byte[] buf) {
+        static byte[] getMD5(byte[] buf) {
             using (var fileHash = MD5.Create())
                 return fileHash.ComputeHash(buf);
         }
 
-        static string MakeMD5String(byte[] md5) {
+        static string makeMD5String(byte[] md5) {
             return BitConverter.ToString(md5).Replace("-", "");
         }
 
-        static byte[] FromMD5String(string md5Str) {
+        static byte[] fromMD5String(string md5Str) {
             byte[] data = new byte[md5Str.Length / 2];
             for (int i = 0; i < data.Length; i++)
                 data[i] = Convert.ToByte(md5Str.Substring(i * 2, 2), 16);
@@ -30,29 +33,33 @@ namespace TaleOfTwoWastelands {
             return data;
         }
 
-        static string GetMD5String(string file) {
+        static string getMD5String(string file) {
             return MakeMD5String(GetMD5(file));
         }
 
-        static string GetMD5String(Stream stream) {
+        static string getMD5String(Stream stream) {
             return MakeMD5String(GetMD5(stream));
         }
 
-        static string GetMD5String(byte[] buf) {
+        static string getMD5String(byte[] buf) {
             return MakeMD5String(GetMD5(buf));
         }
-        #endregion
-
-        #region Legacy mode
+        
+/* VESTIGIAL MACRO
+ *  #endregion
+ *
+ *  #region Legacy mode
+ */
+        
 #if LEGACY || DEBUG
-        static IDictionary<string, string> ReadOldDatabase(string path) {
+        static IDictionary<string, string> readOldDatabase(string path) {
             Debug.Assert(File.Exists(path));
 
             using (var stream = File.OpenRead(path))
                 return (IDictionary<string, string>)new BinaryFormatter().Deserialize(stream);
         }
 
-        static IEnumerable<Tuple<string, byte[]>> FindAlternateVersions(string file) {
+        static IEnumerable<Tuple<string, byte[]>> findAlternateVersions(string file) {
             var justName = Path.GetFileName(file);
             var split = justName.Split('.');
             split[split.Length - 3] = "*";
@@ -68,15 +75,19 @@ namespace TaleOfTwoWastelands {
                    let splitOther = Path.GetFileName(other).Split('.')
                    select Tuple.Create(other, FromMD5String(splitOther[splitOther.Length - 3]));
         }
-#endif
-        #endregion
+        
+/* VESTIGIAL MACRO
+ *  #endif
+ *
+ *  #endregion
+ */
 
-        static string Truncate(this string value, int maxLength) {
+        static string truncate(this string value, int maxLength) {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
 
-        static bool PatternSearch(Stream inStream, string pattern, out string result) {
+        static bool patternSearch(Stream inStream, string pattern, out string result) {
             if (!inStream.CanRead)
                 throw new ArgumentException("Stream must be readable");
 
@@ -116,7 +127,7 @@ namespace TaleOfTwoWastelands {
             return found;
         }
 
-        static void CopyFolder(string inFolder, string destFolder) {
+        static void copyFolder(string inFolder, string destFolder) {
             Directory.CreateDirectory(destFolder);
 
             foreach (string folder in Directory.EnumerateDirectories(inFolder, "*", SearchOption.AllDirectories)) {
@@ -137,7 +148,7 @@ namespace TaleOfTwoWastelands {
             }
         }
 
-        static void AssertElevated() {
+        static void assertElevated() {
             Trace.Assert(Program.IsElevated, string.Format(Localization.MustBeElevated, Localization.TTW));
         }
     }

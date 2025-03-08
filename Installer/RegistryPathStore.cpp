@@ -2,7 +2,7 @@
 
 namespace TaleOfTwoWastelands {
 
-    RegistryKey GetBethKey() {
+    RegistryKey getBethKey() {
         using (var bethKey =
                 Registry.LocalMachine.OpenSubKey(
                     //determine software reg path (depends on architecture)
@@ -13,7 +13,7 @@ namespace TaleOfTwoWastelands {
         }
     }
 
-    string GetPathFromKey(string keyName) {
+    string getPathFromKey(string keyName) {
         using (var bethKey = GetBethKey())
             using (var subKey = bethKey.CreateSubKey(keyName)) {
                 Debug.Assert(subKey != null, "subKey != null");
@@ -21,7 +21,7 @@ namespace TaleOfTwoWastelands {
             }
     }
 
-    void SetPathFromKey(string keyName, string path) {
+    void setPathFromKey(string keyName, string path) {
         throw new InvalidOperationException("Registry writes are disabled");
     }
 }

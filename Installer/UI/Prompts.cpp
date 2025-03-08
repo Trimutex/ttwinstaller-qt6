@@ -13,7 +13,7 @@ namespace TaleOfTwoWastelandsUI {
         TTWSavePath = TryAllStoresGetPath("TaleOfTwoWastelands");
     }
 
-    void PromptPaths() {
+    void promptPaths() {
         Log.File("Looking for Fallout3.exe");
         if (File.Exists(Path.Combine(Fallout3Path, "Fallout3.exe")))
             Log.File("\tFound.");
@@ -33,23 +33,23 @@ namespace TaleOfTwoWastelandsUI {
             TTWSavePath = TTWPrompt();
     }
 
-    string Fallout3Prompt(bool manual = false) {
+    string fallout3Prompt(bool manual = false) {
         openDialog.FilterIndex = 1;
         openDialog.Title = Localization.Fallout3;
         return (Fallout3Path = FindByUserPrompt(openDialog, Localization.Fallout3, "Fallout3", manual));
     }
 
-    string FalloutNVPrompt(bool manual = false) {
+    string falloutNVPrompt(bool manual = false) {
         openDialog.FilterIndex = 2;
         openDialog.Title = Localization.FalloutNewVegas;
         return (FalloutNVPath = FindByUserPrompt(openDialog, Localization.FalloutNewVegas, "FalloutNV", manual));
     }
 
-    string TTWPrompt(bool manual = false) {
+    string ttwPrompt(bool manual = false) {
         return (TTWSavePath = FindByUserPrompt(saveDialog, "Tale of Two Wastelands", "TaleOfTwoWastelands", manual));
     }
 
-    bool OverwritePrompt(string name, string path) {
+    bool overwritePrompt(string name, string path) {
         if (!File.Exists(path)) {
             Log.File(Localization.FileDoesNotExist, path);
             return true;
@@ -71,7 +71,7 @@ namespace TaleOfTwoWastelandsUI {
         return false;
     }
 
-    bool BuildPrompt(string name, string path) {
+    bool buildPrompt(string name, string path) {
         if (!OverwritePrompt(name, path))
             return false;
 
@@ -79,14 +79,14 @@ namespace TaleOfTwoWastelandsUI {
         return true;
     }
 
-    bool BuildFOMODsPrompt() {
+    bool buildFOMODsPrompt() {
         return
             MessageBox.Show(
                     string.Format(Localization.BuildFOMODsPrompt, Localization.TTW, Localization.SuggestedModManager),
                     Localization.BuildFOMODsQuestion, MessageBoxButtons.YesNo) == DialogResult.Yes;
     }
 
-    ErrorPromptResult PatchingErrorPrompt(string file) {
+    ErrorPromptResult patchingErrorPrompt(string file) {
         var promptResult = MessageBox.Show(string.Format(Localization.ErrorWhilePatching, file), Localization.Error, MessageBoxButtons.AbortRetryIgnore);
         switch (promptResult) {
             //case DialogResult.Abort: //Quit install
@@ -101,14 +101,14 @@ namespace TaleOfTwoWastelandsUI {
         return ErrorPromptResult.Abort;
     }
 
-    string TryAllStoresGetPath(string key) {
+    string tryAllStoresGetPath(string key) {
         return (from store in Stores
                 let val = store.GetPathFromKey(key)
                 select val)
             .FirstOrDefault(v => !string.IsNullOrEmpty(v));
     }
 
-    bool TryAllStoresSetPath(string key, string path) {
+    bool tryAllStoresSetPath(string key, string path) {
         foreach (var store in Stores) {
             try {
                 store.SetPathFromKey(key, path);
@@ -121,7 +121,7 @@ namespace TaleOfTwoWastelandsUI {
         return false;
     }
 
-    string FindByUserPrompt(FileDialog dialog, string name, string keyName, bool manual = false) {
+    string findByUserPrompt(FileDialog dialog, string name, string keyName, bool manual = false) {
         Log.File("Prompting user for {0}'s path.", name);
         MessageBox.Show(string.Format("Please select {0}'s location.", name));
 

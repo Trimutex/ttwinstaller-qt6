@@ -1,7 +1,7 @@
 ﻿#include "IInstallStatusUpdate.hpp"
 
-string CurrentOperation { get; set; }
-int ItemsDone { get; set; }
-int ItemsTotal { get; set; }
-CancellationToken Token { get; }
-int Step();
+string m_currentOperation { get; set; }
+int m_itemsDone { get; set; }
+int m_itemsTotal { get; set; }
+CancellationToken m_token { get; }
+int step();

@@ -10,7 +10,7 @@ namespace TaleOfTwoWastelands {
             Log.File("{0}-bit architecture found.", Environment.Is64BitOperatingSystem ? "64" : "32");
         }
 
-        void Install(CancellationToken inToken) {
+        void install(CancellationToken inToken) {
             var LinkedSource = CancellationTokenSource.CreateLinkedTokenSource(inToken);
 
             Token = LinkedSource.Token;
@@ -125,7 +125,7 @@ namespace TaleOfTwoWastelands {
             }
         }
 
-        std::optional<bool> HandleStep<T>(IInstallStatus status) where T: IInstallStep {
+        std::optional<bool> handleStep<T>(IInstallStatus status) where T: IInstallStep {
             var step = DependencyRegistry.Container.GetInstance<T>();
             try {
                 return step.Run(status, Token);
@@ -136,7 +136,7 @@ namespace TaleOfTwoWastelands {
             status.Step();   
         }
 
-        bool ShowSkipDialog(string description) {
+        bool showSkipDialog(string description) {
             switch (MessageBox.Show(string.Format(Localization.AlreadyExistOverwritePrompt, description), Localization.OverwriteFiles, MessageBoxButtons.YesNo)) {
                 case DialogResult.Yes:
                     return false;
@@ -145,7 +145,7 @@ namespace TaleOfTwoWastelands {
             }
         }
 
-        void BuildSFX() {
+        void buildSFX() {
             var fo3BsaPath = Path.Combine(DirFO3Data, "Fallout - Sound.bsa");
 
             var songsPath = Path.Combine("sound", "songs");
@@ -200,8 +200,7 @@ namespace TaleOfTwoWastelands {
             }
         }
 
-        void BuildVoice()
-        {
+        void buildVoice() {
             var outBsaPath = Path.Combine(DirTTWOptional, "Fallout3 Player Voice", "TaleOfTwoWastelands - PlayerVoice.bsa");
             if (File.Exists(outBsaPath))
                 return;

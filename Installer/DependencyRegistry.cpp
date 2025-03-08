@@ -1,8 +1,8 @@
 ﻿#include "DependencyRegistry.hpp"
 
 namespace TaleOfTwoWastelands {
-    static IContainer Container {
-        get { return _container.Value; }
+    static IContainer m_container {
+        get { return _m_container.Value; }
     }
 
     static Container defaultContainer() {

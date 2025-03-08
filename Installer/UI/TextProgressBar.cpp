@@ -1,8 +1,7 @@
 ﻿#include "TextProgressBar.hpp"
 
 namespace TaleOfTwoWastelandsUI {
-        string CustomText
-        {
+        string m_customText {
             get
             {
                 return _customText;
@@ -24,7 +23,7 @@ namespace TaleOfTwoWastelandsUI {
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
         }
 
-        override void OnPaint(PaintEventArgs e) {
+        override void onPaint(PaintEventArgs e) {
             var rect = ClientRectangle;
             rect.Inflate(-3, -3);
 
@@ -50,10 +49,9 @@ namespace TaleOfTwoWastelandsUI {
         }
 
         //Property to hold the custom text
-        string _customText;
+        string _m_customText;
 
-        float ValueF
-        {
+        float m_valueF {
             get { return Value; }
         }
 }

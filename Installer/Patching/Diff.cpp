@@ -2,11 +2,11 @@
 
 namespace TaleOfTwoWastelandsPatching {
 
-    static void SetCompressionLevel() {
+    static void setCompressionLevel() {
         SevenZipCompressor.LzmaDictionarySize = LZMA_DICTSIZE_ULTRA;
     }
 
-    static Stream GetEncodingStream(Stream stream, long signature, bool output) {
+    static Stream getEncodingStream(Stream stream, long signature, bool output) {
         switch (signature) {
             case SIG_LZDIFF41:
                 if (output) {
@@ -25,142 +25,141 @@ namespace TaleOfTwoWastelandsPatching {
                 throw new ArgumentException("unknown encoding type");
         }
     }
-        /// <summary>
-        /// Applies a binary patch a quasi-(in <a href="http://www.daemonology.net/bsdiff/">bsdiff</a> format) to the data in
-        /// <paramref name="input"/> and writes the results of patching to <paramref name="output"/>.
-        /// </summary>
-        /// <param name="input">A <see cref="Stream"/> containing the input data.</param>
-        /// <param name="openPatchStream">A func that can open a <see cref="Stream"/> positioned at the start of the patch data.
-        /// This stream must support reading and seeking, and <paramref name="openPatchStream"/> must allow multiple streams on
-        /// the patch to be opened concurrently.</param>
-        /// <param name="output">A <see cref="Stream"/> to which the patched data is written.</param>
-        // NOTE: originally unsafe
-        static void Apply(byte* pInput, long length, byte* pPatch, long patchLength, Stream output) {
-            Stream controlStream, diffStream, extraStream;
-            var newSize = CreatePatchStreams(pPatch, patchLength, out controlStream, out diffStream, out extraStream);
+    /// <summary>
+    /// Applies a binary patch a quasi-(in <a href="http://www.daemonology.net/bsdiff/">bsdiff</a> format) to the data in
+    /// <paramref name="input"/> and writes the results of patching to <paramref name="output"/>.
+    /// </summary>
+    /// <param name="input">A <see cref="Stream"/> containing the input data.</param>
+    /// <param name="openPatchStream">A func that can open a <see cref="Stream"/> positioned at the start of the patch data.
+    /// This stream must support reading and seeking, and <paramref name="openPatchStream"/> must allow multiple streams on
+    /// the patch to be opened concurrently.</param>
+    /// <param name="output">A <see cref="Stream"/> to which the patched data is written.</param>
+    // NOTE: originally unsafe
+    static void apply(byte* pInput, long length, byte* pPatch, long patchLength, Stream output) {
+        Stream controlStream, diffStream, extraStream;
+        var newSize = CreatePatchStreams(pPatch, patchLength, out controlStream, out diffStream, out extraStream);
 
-            // prepare to read three parts of the patch in parallel
-            ApplyInternal(newSize, new UnmanagedMemoryStream(pInput, length), controlStream, diffStream, extraStream, output);
-        }
+        // prepare to read three parts of the patch in parallel
+        ApplyInternal(newSize, new UnmanagedMemoryStream(pInput, length), controlStream, diffStream, extraStream, output);
+    }
 
-        // NOTE: originally unsafe
-        static long CreatePatchStreams(byte* pPatch, long patchLength, out Stream ctrl, out Stream diff, out Stream extra) {
-            Func<long, long, Stream> openPatchStream = (u_offset, u_length) =>
-                new UnmanagedMemoryStream(pPatch + u_offset, u_length > 0 ? u_length : patchLength - u_offset);
+    // NOTE: originally unsafe
+    static long createPatchStreams(byte* pPatch, long patchLength, out Stream ctrl, out Stream diff, out Stream extra) {
+        Func<long, long, Stream> openPatchStream = (u_offset, u_length) =>
+            new UnmanagedMemoryStream(pPatch + u_offset, u_length > 0 ? u_length : patchLength - u_offset);
 
-            // read header
-            long controlLength, diffLength, newSize, signature;
-            using (Stream patchStream = openPatchStream(0, HEADER_SIZE)) {
-                // check patch stream capabilities
-                if (!patchStream.CanRead)
-                    throw new ArgumentException("Patch stream must be readable.", "openPatchStream");
-                if (!patchStream.CanSeek)
-                    throw new ArgumentException("Patch stream must be seekable.", "openPatchStream");
+        // read header
+        long controlLength, diffLength, newSize, signature;
+        using (Stream patchStream = openPatchStream(0, HEADER_SIZE)) {
+            // check patch stream capabilities
+            if (!patchStream.CanRead)
+                throw new ArgumentException("Patch stream must be readable.", "openPatchStream");
+            if (!patchStream.CanSeek)
+                throw new ArgumentException("Patch stream must be seekable.", "openPatchStream");
 
-                byte[] header = new byte[HEADER_SIZE];
-                patchStream.Read(header, 0, HEADER_SIZE);
+            byte[] header = new byte[HEADER_SIZE];
+            patchStream.Read(header, 0, HEADER_SIZE);
 
-                fixed (byte* pHead = header) {
-                    // check for appropriate magic
-                    signature = ReadInt64(pHead);
+            fixed (byte* pHead = header) {
+                // check for appropriate magic
+                signature = ReadInt64(pHead);
 
-                    // read lengths from header
-                    controlLength = ReadInt64(pHead + 8);
-                    diffLength = ReadInt64(pHead + 16);
-                    newSize = ReadInt64(pHead + 24);
-                }
-
-                if (controlLength < 0 || diffLength < 0 || newSize < 0)
-                    throw new InvalidOperationException("Corrupt patch.");
+                // read lengths from header
+                controlLength = ReadInt64(pHead + 8);
+                diffLength = ReadInt64(pHead + 16);
+                newSize = ReadInt64(pHead + 24);
             }
 
-            // prepare to read three parts of the patch in parallel
-            Stream
-                compressedControlStream = openPatchStream(HEADER_SIZE, controlLength),
-                compressedDiffStream = openPatchStream(HEADER_SIZE + controlLength, diffLength),
-                compressedExtraStream = openPatchStream(HEADER_SIZE + controlLength + diffLength, -1);
-
-            // decompress each part (to read it)
-            ctrl = GetEncodingStream(compressedControlStream, signature, false);
-            diff = GetEncodingStream(compressedDiffStream, signature, false);
-            extra = GetEncodingStream(compressedExtraStream, signature, false);
-
-            return newSize;
+            if (controlLength < 0 || diffLength < 0 || newSize < 0)
+                throw new InvalidOperationException("Corrupt patch.");
         }
 
-        static void ApplyInternal(long newSize, Stream input, Stream ctrl, Stream diff, Stream extra, Stream output) {
-            long addSize, copySize, seekAmount;
+        // prepare to read three parts of the patch in parallel
+        Stream
+            compressedControlStream = openPatchStream(HEADER_SIZE, controlLength),
+                                    compressedDiffStream = openPatchStream(HEADER_SIZE + controlLength, diffLength),
+                                    compressedExtraStream = openPatchStream(HEADER_SIZE + controlLength + diffLength, -1);
 
-            using (ctrl)
+        // decompress each part (to read it)
+        ctrl = GetEncodingStream(compressedControlStream, signature, false);
+        diff = GetEncodingStream(compressedDiffStream, signature, false);
+        extra = GetEncodingStream(compressedExtraStream, signature, false);
+
+        return newSize;
+    }
+
+    static void applyInternal(long newSize, Stream input, Stream ctrl, Stream diff, Stream extra, Stream output) {
+        long addSize, copySize, seekAmount;
+
+        using (ctrl)
             using (diff)
             using (extra)
             using (BinaryReader
-                diffReader = new BinaryReader(diff),
-                extraReader = new BinaryReader(extra))
-                while (output.Position < newSize) {
-                    //read control data
-                    //set of triples (x,y,z) meaning
-                    // add x bytes from oldfile to x bytes from the diff block;
-                    // copy y bytes from the extra block;
-                    // seek forwards in oldfile by z bytes;
-                    addSize = ReadInt64(ctrl);
-                    copySize = ReadInt64(ctrl);
-                    seekAmount = ReadInt64(ctrl);
+                    diffReader = new BinaryReader(diff),
+                    extraReader = new BinaryReader(extra))
+            while (output.Position < newSize) {
+                //read control data
+                //set of triples (x,y,z) meaning
+                // add x bytes from oldfile to x bytes from the diff block;
+                // copy y bytes from the extra block;
+                // seek forwards in oldfile by z bytes;
+                addSize = ReadInt64(ctrl);
+                copySize = ReadInt64(ctrl);
+                seekAmount = ReadInt64(ctrl);
 
-                    // sanity-check
-                    if (output.Position + addSize > newSize)
-                        throw new InvalidOperationException("Corrupt patch.");
+                // sanity-check
+                if (output.Position + addSize > newSize)
+                    throw new InvalidOperationException("Corrupt patch.");
 
-                    {
-                        // read diff string
-                        var newData = diffReader.ReadBytes((int)addSize);
+                {
+                    // read diff string
+                    var newData = diffReader.ReadBytes((int)addSize);
 
-                        // add old data to diff string
-                        var availableInputBytes = (int)Math.Min(addSize, input.Length - input.Position);
-                        for (int i = 0; i < availableInputBytes; i++)
-                            newData[i] += (byte)input.ReadByte();
+                    // add old data to diff string
+                    var availableInputBytes = (int)Math.Min(addSize, input.Length - input.Position);
+                    for (int i = 0; i < availableInputBytes; i++)
+                        newData[i] += (byte)input.ReadByte();
 
-                        output.Write(newData, 0, (int)addSize);
-                        //input.Seek(addSize, SeekOrigin.Current);
-                    }
-
-                    // sanity-check
-                    if (output.Position + copySize > newSize)
-                        throw new InvalidOperationException("Corrupt patch.");
-
-                    // read extra string
-                    {
-                        var newData = extraReader.ReadBytes((int)copySize);
-                        output.Write(newData, 0, (int)copySize);
-                    }
-
-                    // adjust position
-                    input.Seek(seekAmount, SeekOrigin.Current);
+                    output.Write(newData, 0, (int)addSize);
+                    //input.Seek(addSize, SeekOrigin.Current);
                 }
-        }
+
+                // sanity-check
+                if (output.Position + copySize > newSize)
+                    throw new InvalidOperationException("Corrupt patch.");
+
+                // read extra string
+                {
+                    var newData = extraReader.ReadBytes((int)copySize);
+                    output.Write(newData, 0, (int)copySize);
+                }
+
+                // adjust position
+                input.Seek(seekAmount, SeekOrigin.Current);
+            }
+    }
+
+    // NOTE: originally unsafe
+    static long readInt64(byte* pb) {
+        long y = pb[7] & 0x7F;
+        y <<= 8; y += pb[6];
+        y <<= 8; y += pb[5];
+        y <<= 8; y += pb[4];
+        y <<= 8; y += pb[3];
+        y <<= 8; y += pb[2];
+        y <<= 8; y += pb[1];
+        y <<= 8; y += pb[0];
+
+        return (pb[7] & 0x80) != 0 ? -y : y;
+    }
+
+    static long readInt64(Stream ps) {
+        var buf = new byte[sizeof(long)];
+        if (ps.Read(buf, 0, sizeof(long)) != sizeof(long))
+            throw new InvalidOperationException("Could not read long from stream");
 
         // NOTE: originally unsafe
-        static long ReadInt64(byte* pb) {
-            long y = pb[7] & 0x7F;
-            y <<= 8; y += pb[6];
-            y <<= 8; y += pb[5];
-            y <<= 8; y += pb[4];
-            y <<= 8; y += pb[3];
-            y <<= 8; y += pb[2];
-            y <<= 8; y += pb[1];
-            y <<= 8; y += pb[0];
-
-            return (pb[7] & 0x80) != 0 ? -y : y;
-        }
-
-        public static long ReadInt64(Stream ps)
-        {
-            var buf = new byte[sizeof(long)];
-            if (ps.Read(buf, 0, sizeof(long)) != sizeof(long))
-                throw new InvalidOperationException("Could not read long from stream");
-
-            // NOTE: originally unsafe
-                fixed (byte* pb = buf)
-                    return ReadInt64(pb);
-        }
+        fixed (byte* pb = buf)
+            return ReadInt64(pb);
+    }
 }

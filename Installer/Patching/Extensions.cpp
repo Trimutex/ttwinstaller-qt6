@@ -8,7 +8,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static uint ToUInt32(this byte[] data, int start = 0) {
+    static uint toUInt32(this byte[] data, int start = 0) {
         return BitConverter.IsLittleEndian
             ? (uint)(data[start] | data[start + 1] << 8 | data[start + 2] << 16 | data[start + 3] << 24)
             : (uint)(data[start] << 24 | data[start + 1] << 16 | data[start + 2] << 8 | data[start + 3]);
@@ -20,7 +20,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static ulong ToUInt64(this byte[] data, int start = 0) {
+    static ulong toUInt64(this byte[] data, int start = 0) {
         if (BitConverter.IsLittleEndian) {
             var i1 = (uint)(data[start] | data[start + 1] << 8 | data[start + 2] << 16 | data[start + 3] << 24);
             var i2 = (ulong)(data[start + 4] | data[start + 5] << 8 | data[start + 6] << 16 | data[start + 7] << 24);
@@ -42,7 +42,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static uint RotateLeft(this uint x, byte r) {
+    static uint rotateLeft(this uint x, byte r) {
         return (x << r) | (x >> (32 - r));
     }
 
@@ -52,7 +52,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static ulong RotateLeft(this ulong x, byte r) {
+    static ulong rotateLeft(this ulong x, byte r) {
         return (x << r) | (x >> (64 - r));
     }
 
@@ -62,7 +62,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static uint FMix(this uint h) {
+    static uint fMix(this uint h) {
         // pipelining friendly algorithm
         h = (h ^ (h >> 16)) * 0x85ebca6b;
         h = (h ^ (h >> 13)) * 0xc2b2ae35;
@@ -75,7 +75,7 @@ namespace TaleOfTwoWastelandsPatching {
      *  #endif
      */
     // NOTE: originally internal
-    static ulong FMix(this ulong h) {
+    static ulong fMix(this ulong h) {
         // pipelining friendly algorithm
         h = (h ^ (h >> 33)) * 0xff51afd7ed558ccd;
         h = (h ^ (h >> 33)) * 0xc4ceb9fe1a85ec53;

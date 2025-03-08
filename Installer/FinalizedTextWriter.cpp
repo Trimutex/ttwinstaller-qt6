@@ -6,7 +6,7 @@ namespace TaleOfTwoWastelands {
         _checksumSize = Encoding.GetByteCount(Checksum);
     }
 
-    override void Write(char[] buffer, int index, int count) {
+    override void write(char[] buffer, int index, int count) {
         lock (_checksum)
         {
             if (_writingChecksum) {
@@ -29,15 +29,15 @@ namespace TaleOfTwoWastelands {
         }
     }
 
-    override Encoding Encoding {
+    override Encoding m_encoding {
         get { return Encoding.UTF8; }
     }
 
-    string Checksum {
+    string m_checksum {
         get { return _checksum.Value.ToString("X8"); }
     }
 
-    byte[] UpdateChecksum(char[] s) {
+    byte[] updateChecksum(char[] s) {
         var messageBytes = Encoding.GetBytes(s);
         _checksum.Update(messageBytes);
 

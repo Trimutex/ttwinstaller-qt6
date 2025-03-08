@@ -2,8 +2,7 @@
 
 namespace TaleOfTwoWastelandsPatching {
 
-    bool PatchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false)
-    {
+    bool patchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false) {
         var Op = new InstallStatus(Progress, Token) { ItemsTotal = 7 };
 
         var outBsaFilename = Path.GetFileNameWithoutExtension(newBSA);
@@ -25,16 +24,31 @@ namespace TaleOfTwoWastelandsPatching {
         {
             Op.CurrentOperation = "Opening rename database";
 
-#if LEGACY
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY
+ */
             var renamePath = Path.Combine(Installer.PatchDir, outBsaFilename, "RenameFiles.dict");
-#else
+
+/* VESTIGIAL MACRO
+ *  #else
+ */
             var renamePath = Path.Combine(Installer.PatchDir, Path.ChangeExtension(outBsaFilename, ".ren"));
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
             if (File.Exists(renamePath))
             {
-#if LEGACY
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY
+ */
                 renameDict = new Dictionary<string, string>(Util.ReadOldDatabase(renamePath));
-#else
+
+/* VESTIGIAL MACRO
+ *  #else
+ */
                 using (var fileStream = File.OpenRead(renamePath))
                     using (var lzmaStream = new LzmaDecodeStream(fileStream))
                     using (var reader = new BinaryReader(lzmaStream))
@@ -45,7 +59,10 @@ namespace TaleOfTwoWastelandsPatching {
                         while (numPairs-- > 0)
                             renameDict.Add(reader.ReadString(), reader.ReadString());
                     }
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
             }
             else
                 renameDict = new Dictionary<string, string>();
@@ -60,11 +77,17 @@ namespace TaleOfTwoWastelandsPatching {
         {
             Op.CurrentOperation = "Opening patch database";
 
-#if LEGACY
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY
+ */
             var chkPrefix = Path.Combine(Installer.PatchDir, outBsaFilename);
             var chkPath = Path.Combine(chkPrefix, "CheckSums.dict");
             patchDict = PatchDict.FromOldDatabase(Util.ReadOldDatabase(chkPath), chkPrefix, b => b);
-#else
+
+/* VESTIGIAL MACRO
+ *  #else
+ */
             var patchPath = Path.Combine(Installer.PatchDir, Path.ChangeExtension(outBsaFilename, ".pat"));
             if (File.Exists(patchPath))
             {
@@ -75,7 +98,10 @@ namespace TaleOfTwoWastelandsPatching {
                 m_log.Dual("\tNo patch database is available for: " + oldBSA);
                 return false;
             }
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
         }
         finally
         {
@@ -113,30 +139,53 @@ namespace TaleOfTwoWastelandsPatching {
                     join bsaFile in allFiles on patKvp.Key equals bsaFile.Filename
                     select new PatchJoin(bsaFile, foundOld.SingleOrDefault(), patKvp.Value);
 
-#if DEBUG
+/* VESTIGIAL MACRO
+ *  #if DEBUG
+ */
                 var watch = new Stopwatch();
                 try
                 {
                     watch.Start();
-#endif
-#if PARALLEL
+
+/* VESTIGIAL MACRO
+ *  #endif
+ *  #if PARALLEL  
+ */
                     Parallel.ForEach(joinedPatches, join =>
-#else
+
+/* VESTIGIAL MACRO
+ *  #else
+ */
                             foreach (var join in joinedPatches)
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
                             HandleFile(opChk, join)
-#if PARALLEL
+
+/* VESTIGIAL MACRO
+ *  #if PARALLEL
+ */
                             )
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
                         ;
-#if DEBUG
+
+/* VESTIGIAL MACRO
+ *  #if DEBUG
+ */
                 }
                 finally
                 {
                     watch.Stop();
                     Debug.WriteLine(outBsaFilename + " HandleFile loop finished in " + watch.Elapsed);
                 }
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
             }
             finally
             {
@@ -178,8 +227,8 @@ namespace TaleOfTwoWastelandsPatching {
 
         return true;
     }
-    static IEnumerable<Tuple<string, string, string>> CreateRenameQuery(BSA bsa, IDictionary<string, string> renameDict)
-    {
+
+    static IEnumerable<Tuple<string, string, string>> createRenameQuery(BSA bsa, IDictionary<string, string> renameDict) {
         //TODO: use dict union
         var renameGroup = from folder in bsa
             from file in folder
@@ -205,8 +254,8 @@ namespace TaleOfTwoWastelandsPatching {
             let addedFile = folder.Add(newFile)
             select Tuple.Create(a.file.Name, newFile.Name, a.newFilename);
     }
-    bool PatchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk)
-    {
+
+    bool patchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk) {
         //InflaterInputStream won't let the patcher seek it,
         //so we have to perform a new allocate-and-copy
         byte[]
@@ -229,8 +278,7 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-    void RenameFiles(BSA bsa, IDictionary<string, string> renameDict)
-    {
+    void renameFiles(BSA bsa, IDictionary<string, string> renameDict) {
         const string opPrefix = "Renaming BSA files";
 
         var opRename = new InstallStatus(Progress, Token) { CurrentOperation = opPrefix };
@@ -238,20 +286,35 @@ namespace TaleOfTwoWastelandsPatching {
         var renameFixes = CreateRenameQuery(bsa, renameDict);
         opRename.ItemsTotal = renameDict.Count;
 
-#if PARALLEL
+
+/* VESTIGIAL MACRO
+ *  #if PARALLEL
+ */
         Parallel.ForEach(renameFixes, a =>
-#else
+
+/* VESTIGIAL MACRO
+ *  #else
+ */
                 foreach (var a in renameFixes)
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
                 {
                 renameDict.Remove(a.Item3);
 
                 opRename.CurrentOperation = opPrefix + ": " + a.Item1 + " -> " + a.Item2;
                 opRename.Step();
                 }
-#if PARALLEL
+
+/* VESTIGIAL MACRO
+ *  #if PARALLEL
+ */
                 )
-#endif
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
             ;
     }
 
@@ -263,7 +326,7 @@ namespace TaleOfTwoWastelandsPatching {
         return _m_installer.Token;
     }
 
-    void HandleFile(InstallStatus opChk, PatchJoin join) {
+    void handleFile(InstallStatus opChk, PatchJoin join) {
         try {
             var newFile = join.Item1;
             var oldFile = join.Item2;

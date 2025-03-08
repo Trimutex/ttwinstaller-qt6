@@ -10,7 +10,7 @@ namespace PatchMaker {
         /// <param name="newData">The new binary data.</param>
         /// <param name="output">A <see cref="Stream"/> to which the patch will be written.</param>
         // NOTE: originally unsafe
-        static void Create(byte[] oldBuf, byte[] newBuf, long signature, Stream output) {
+        static void create(byte[] oldBuf, byte[] newBuf, long signature, Stream output) {
             // check arguments
             if (oldBuf == null)
                 throw new ArgumentNullException("oldData");
@@ -189,11 +189,11 @@ namespace PatchMaker {
             }
         }
 
-        static long ReadInt64(byte* buf) {
+        static long readInt64(byte* buf) {
             return Diff.ReadInt64(buf);
         }
 
-        static Stream GetEncodingStream(Stream stream, long signature, bool output) {
+        static Stream getEncodingStream(Stream stream, long signature, bool output) {
             return Diff.GetEncodingStream(stream, signature, output);
         }
 
@@ -202,7 +202,7 @@ namespace PatchMaker {
         /// </summary>
         // NOTE: originally unsafe
         // NOTE: internal function
-        static byte[] ConvertPatch(byte* pPatch, long length, long inputSig, long outputSig) {
+        static byte[] convertPatch(byte* pPatch, long length, long inputSig, long outputSig) {
             if (inputSig == outputSig)
                 throw new ArgumentException("output must be different from input");
 
@@ -301,7 +301,7 @@ namespace PatchMaker {
 
 
         // NOTE: originally unsafe
-        static int CompareBytes(byte* left, int leftLength, byte* right, int rightLength) {
+        static int compareBytes(byte* left, int leftLength, byte* right, int rightLength) {
             int diff = 0;
             for (int i = 0; i < leftLength && i < rightLength; i++) {
                 diff = left[i] - right[i];
@@ -312,7 +312,7 @@ namespace PatchMaker {
         }
 
         // NOTE: originally unsafe
-        static int MatchLength(byte* oldData, int oldLength, byte* newData, int newLength) {
+        static int matchLength(byte* oldData, int oldLength, byte* newData, int newLength) {
             int i;
             for (i = 0; i < oldLength && i < newLength; i++) {
                 if (oldData[i] != newData[i])
@@ -323,7 +323,7 @@ namespace PatchMaker {
         }
 
         // NOTE: originally unsafe
-        static int Search(int* I, byte* oldData, int oldLength, byte* newData, int newLength, int newOffset, int start, int end, out int pos) {
+        static int search(int* I, byte* oldData, int oldLength, byte* newData, int newLength, int newOffset, int start, int end, out int pos) {
             if (end - start < 2) {
                 int startLength = MatchLength((oldData + I[start]), oldLength, (newData + newOffset), newLength);
                 int endLength = MatchLength((oldData + I[end]), oldLength, (newData + newOffset), newLength);
@@ -350,7 +350,7 @@ namespace PatchMaker {
      *  [MethodImpl(MethodImplOptions.AggressiveInlining)]
      */
         // NOTE: originally unsafe
-        static void WriteInt64(long y, byte* pb) {
+        static void writeInt64(long y, byte* pb) {
             if (y < 0) {
                 y = -y;
 

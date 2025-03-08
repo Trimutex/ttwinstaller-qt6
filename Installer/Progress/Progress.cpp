@@ -31,7 +31,7 @@ namespace TaleOfTwoWastelandsProgress {
 
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
-        virtual void OnReport(T value) {
+        virtual void onReport(T value) {
             // If there's no handler, don't bother going through the [....] context.
             // Inside the callback, we'll need to check again, in case 
             // an event handler is removed between now and then.
@@ -46,13 +46,13 @@ namespace TaleOfTwoWastelandsProgress {
 
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
-        void IProgress<T>.Report(T value) {
+        void IProgress<T>.report(T value) {
             OnReport(value);
         }
 
         /// <summary>Invokes the action and event callbacks.</summary>
         /// <param name="state">The progress value.</param>
-        void InvokeHandlers(object state) {
+        void invokeHandlers(object state) {
             T value = (T)state;
 
             Action<T> handler = m_handler;
