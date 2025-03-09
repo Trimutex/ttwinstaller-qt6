@@ -125,6 +125,22 @@ namespace TaleOfTwoWastelands {
             }
         }
 
+        std::string getDirFO3Data(void) {
+            return Path.Combine(Prompts.Fallout3Path, "Data");
+        }
+
+        std::string getDirFNVData(void) {
+            return Path.Combine(Prompts.FalloutNVPath, "Data");
+        }
+
+        std::string getDirTTWMain(void) {
+            return Path.Combine(Prompts.TTWSavePath, Paths.MainDir);
+        }
+
+        std::string getDirTTWOptional(void) {
+            return Path.Combine(Prompts.TTWSavePath, Paths.OptDir);
+        }
+
         std::optional<bool> handleStep<T>(IInstallStatus status) where T: IInstallStep {
             var step = DependencyRegistry.Container.GetInstance<T>();
             try {

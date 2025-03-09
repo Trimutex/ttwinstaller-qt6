@@ -4,7 +4,7 @@ namespace TaleOfTwoWastelands {
     static class Program {
     public:
         // NOTE: read-only block
-        static string m_logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "TaleOfTwoWastelands");
+        static std::string m_logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "TaleOfTwoWastelands");
         static bool m_isElevated = verifyElevation();
 
         static void main();

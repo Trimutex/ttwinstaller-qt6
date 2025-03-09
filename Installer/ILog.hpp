@@ -5,10 +5,11 @@ namespace TaleOfTwoWastelands {
     // NOTE: interface class
     class ILog {
     public:
-        IProgress<string> m_displayMessage { get; set; }
+        IProgress<std::string> m_displayMessage { get; set; }
         
-        void file(string msg, params object[] args);
-        void display(string msg, params object[] args);
-        void dual(string msg, params object[] args);
+        // TODO: replace `params object[] args`
+        void file(std::string msg, params object[] args);
+        void display(std::string msg, params object[] args);
+        void dual(std::string msg, params object[] args);
     }
 }

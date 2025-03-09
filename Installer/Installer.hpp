@@ -4,31 +4,21 @@ namespace TaleOfTwoWastelands {
     // NOTE: public class
     class Installer : IInstaller {
     public:
-        #region Statics
+        
+/* VESTIGIAL MACRO
+ *  #region Statics
+ */
         // NOTE: read-only block
-        static string m_patchDir = Path.Combine(Paths.AssetsDir, "TTW Data", "TTW Patches");
-        #endregion
+        static std::string m_patchDir = Path.Combine(Paths.AssetsDir, "TTW Data", "TTW Patches");
 
-        #region Instance public properties
-        string m_dirFO3Data
-        {
-            get { return Path.Combine(Prompts.Fallout3Path, "Data"); }
-        }
+/* VESTIGIAL MACRO
+ *  #endregion
+ */
 
-        string m_dirFNVData
-        {
-            get { return Path.Combine(Prompts.FalloutNVPath, "Data"); }
-        }
-
-        string m_dirTTWMain
-        {
-            get { return Path.Combine(Prompts.TTWSavePath, Paths.MainDir); }
-        }
-
-        string m_dirTTWOptional
-        {
-            get { return Path.Combine(Prompts.TTWSavePath, Paths.OptDir); }
-        }
+        
+/* VESTIGIAL MACRO
+ *  #region Instance public properties
+ */
 
         /// <summary>
         /// Provides progress updates for minor operations
@@ -40,29 +30,46 @@ namespace TaleOfTwoWastelands {
         IProgress<InstallStatus> m_progressMajorOperation { get; set; }
 
         CancellationToken m_token { get; private set; }
-        #endregion
+        
+/* VESTIGIAL MACRO
+ *  #endregion
+ */
 
         Installer(ILog log, IPrompts prompts);
         void install(CancellationToken inToken);
+        std::string getDirFO3Data(void);
+        std::string getDirFNVData(void);
+        std::string getDirTTWMain(void);
+        std::string getDirTTWOptional(void);
 
     private:
-        #region Instance m_private
+        std::string m_dirFO3Data;
+        std::string m_dirFNVData;
+        std::string m_dirTTWMain;
+        std::string m_dirTTWOptional;
+        
+/* VESTIGIAL MACRO
+ *  #region Instance m_private
+ */
         BsaDiff _m_bsaDiff;
         NVSE _m_nvse;
 
         // NOTE: read-only block
         ILog m_log;
         IPrompts m_prompts;
-        #endregion
+        
+/* VESTIGIAL MACRO
+ *  #endregion
+ */
 
         std::optional<bool> handleStep<T>(IInstallStatus status);
-        bool showSkipDialog(string description);
+        bool showSkipDialog(std::string description);
         void buildSFX();
         void buildVoice();
         bool patchMasters(InstallStatus opProg);
-        void falloutLineCopy(string name, string path);
-        static bool checkExisting(string path, FileValidation newChk);
-        bool patchMaster(string esm);
-        void fail(string msg = null);
+        void falloutLineCopy(std::string name, std::string path);
+        static bool checkExisting(std::string path, FileValidation newChk);
+        bool patchMaster(std::string esm);
+        void fail(std::string msg = null);
     }
 }

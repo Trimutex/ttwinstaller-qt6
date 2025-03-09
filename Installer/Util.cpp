@@ -90,12 +90,16 @@ namespace TaleOfTwoWastelands {
  *  #endregion
  */
 
-        static string truncate(this string value, int maxLength) {
+        // NOTE: std::string value was originally `this string value`
+        //      Does this even matter?
+        static string truncate(std::string value, int maxLength) {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
 
-        static bool patternSearch(Stream inStream, string pattern, out string result) {
+        // NOTE: std::string result was originally `out string result`
+        //      Why the need for extra return?
+        static bool patternSearch(Stream inStream, string pattern, std::string result) {
             if (!inStream.CanRead)
                 throw new ArgumentException("Stream must be readable");
 
