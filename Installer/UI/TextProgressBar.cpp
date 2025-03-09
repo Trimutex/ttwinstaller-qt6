@@ -1,19 +1,15 @@
 ﻿#include "TextProgressBar.hpp"
 
 namespace TaleOfTwoWastelandsUI {
-        string m_customText {
-            get
-            {
-                return _customText;
-            }
-            set
-            {
-                if (_customText != value)
-                {
-                    _customText = value;
-                    Invalidate();
-                }
-            }
+        std::string getCustomText(void) {
+            return _m_customText;
+        }
+
+        std::string setCustomText(void) {
+            if (_m_customText == value)
+                return;
+            _m_customText = value;
+            Invalidate();
         }
 
         TextProgressBar() {
@@ -46,12 +42,5 @@ namespace TaleOfTwoWastelandsUI {
             var location = new Point((int)((rect.Width - len.Width) / 2), (int)((rect.Height - len.Height) / 2));
             // Draw the custom text
             g.DrawString(CustomText, Font, SystemBrushes.InfoText, location);
-        }
-
-        //Property to hold the custom text
-        string _m_customText;
-
-        float m_valueF {
-            get { return Value; }
         }
 }

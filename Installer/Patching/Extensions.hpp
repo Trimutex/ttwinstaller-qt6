@@ -7,13 +7,13 @@ namespace TaleOfTwoWastelandsPatching {
     public:
         // WARN: prob needs to be protected and using friend classes
         // due to vigorous usage of internal originally 
-        static uint toUInt32(this byte[] data, int start = 0);
-        static uint toUInt32(this byte[] data, int start = 0) {
-        static ulong toUInt64(this byte[] data, int start = 0)
-        static uint rotateLeft(this uint x, byte r)
-        static ulong rotateLeft(this ulong x, byte r)
-        static uint fMix(this uint h)
-        static ulong fMix(this ulong h)
+        static unsigned toUInt32(this uint8_t[] data, int start = 0);
+        static unsigned toUInt32(this uint8_t[] data, int start = 0);
+        static unsigned long toUInt64(this uint8_t[] data, int start = 0);
+        static unsigned rotateLeft(this unsigned x, uint8_t r);
+        static unsigned long rotateLeft(this unsigned long x, uint8_t r);
+        static unsigned fMix(this unsigned h);
+        static unsigned long fMix(this unsigned long h);
 
     }
 }

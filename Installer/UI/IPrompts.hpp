@@ -4,17 +4,22 @@ namespace TaleOfTwoWastelandsUI {
     // NOTE: public class
     // NOTE: interface class
 	class IPrompts {
-		string m_fallout3Path { get; }
-		string m_falloutNVPath { get; }
-		string m_ttwSavePath { get; }
+    public:
+        std::string getFO3Path(void);
+        std::string getFNVPath(void);
+        std::string getTTWSavePath(void);
 
-		bool buildPrompt(string name, string path);
-		string fallout3Prompt(bool manual = false);
-		string falloutNVPrompt(bool manual = false);
-		bool overwritePrompt(string name, string path);
+		bool buildPrompt(std::string name, std::string path);
+        std::string fallout3Prompt(bool manual = false);
+        std::string falloutNVPrompt(bool manual = false);
+		bool overwritePrompt(std::string name, std::string path);
 	    bool buildFOMODsPrompt();
-		ErrorPromptResult patchingErrorPrompt(string file);
+		ErrorPromptResult patchingErrorPrompt(std::string file);
 		void promptPaths();
-		string ttwPrompt(bool manual = false);
+        std::string ttwPrompt(bool manual = false);
+    private:
+        std::string m_fallout3Path;
+		std::string m_falloutNVPath;
+		std::string m_ttwSavePath;
 	}
 }

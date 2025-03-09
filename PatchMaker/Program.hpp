@@ -10,7 +10,7 @@ namespace PatchMaker {
 	class Program {
     public:
         static void main();
-        static uint8_t getDiff(std::string diffPath, long convertSignature = -1, bool moveToUsed = false);
+        static uint8_t[] getDiff(std::string diffPath, long convertSignature = -1, bool moveToUsed = false);
 
     private:
         const std::string m_inDir = "BuildDB";

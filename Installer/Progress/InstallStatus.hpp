@@ -1,5 +1,8 @@
 #pragma once
 
+#include <optional>
+#include <string>
+
 namespace TaleOfTwoWastelandsProgress {
     // NOTE: public class
     class InstallStatus : IInstallStatus {
@@ -7,8 +10,8 @@ namespace TaleOfTwoWastelandsProgress {
         CancellationToken m_token;
         int m_itemsDone;
         int m_itemsTotal;
-        string m_currentOperation;
-        InstallStatus(IProgress<InstallStatus> progress, CancellationToken? token = null);
+        std::string m_currentOperation;
+        InstallStatus(IProgress<InstallStatus> progress, std::optional<CancellationToken> token = null);
         int step();
         void finish();
 
@@ -19,7 +22,7 @@ namespace TaleOfTwoWastelandsProgress {
 
         int _m_itemsDone;
         int _m_itemsTotal;
-        string _m_currentOperation;
+        std::string _m_currentOperation;
 
         void update();
     }

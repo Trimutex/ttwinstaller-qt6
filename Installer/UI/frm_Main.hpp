@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelandsUI {
     // NOTE: public class
     // NOTE: partial class
@@ -17,7 +19,7 @@ namespace TaleOfTwoWastelandsUI {
 
         void fromMainLoad(object sender, EventArgs e);
         void updateProgressBar(InstallStatus opProg, TextProgressBar bar);
-        void updateLog(string msg);
+        void updateLog(std::string msg);
         void buttonFO3BrowseOnClick(object sender, EventArgs e);
         void buttonFNVBrowseOnClick(object sender, EventArgs e);
         void buttonTTWBrowseOnClick(object sender, EventArgs e);

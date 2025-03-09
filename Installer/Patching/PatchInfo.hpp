@@ -1,21 +1,29 @@
 #pragma once
 
+#include <sstream>
+
 namespace TaleOfTwoWastelandsPatching {
     // NOTE: public class
     class PatchInfo {
     public:
-        FileValidation m_metadata { get; set; }
-        byte[] m_data { get; set; }
+        FileValidation m_metadata;
+        uint8_t[] m_data;
 
         PatchInfo() { }
         PatchInfo(BinaryReader reader);
         void writeTo(BinaryWriter writer);
-        bool patchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk);
-        bool patchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk);
+        bool patchBytes(uint8_t[] inputBytes, FileValidation targetChk, out uint8_t[] outputBytes, out FileValidation outputChk);
+        bool patchStream(std::ostringstream input, FileValidation targetChk, std::ostringstream output, out FileValidation outputChk);
 
-#if LEGACY || DEBUG
-        static PatchInfo fromOldDiff(byte[] diffData, FileValidation oldChk);
-#endif
+
+/* VESTIGIAL MACRO
+ *  #if LEGACY || DEBUG
+ */
+        static PatchInfo fromOldDiff(uint8_t[] diffData, FileValidation oldChk);
+
+/* VESTIGIAL MACRO
+ *  #endif
+ */
 
     }
 }

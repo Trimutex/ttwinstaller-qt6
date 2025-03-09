@@ -1,26 +1,15 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelandsUI {
 	//thanks Barry
 	//http://stackoverflow.com/a/3529945
     // NOTE: sealed class
 	class TextProgressBar : ProgressBar {
     public:
-        string m_customText
-        {
-            get
-            {
-                return _customText;
-            }
-            set
-            {
-                if (_customText != value)
-                {
-                    _customText = value;
-                    Invalidate();
-                }
-            }
-        }
+        std::string getCustomText(void);
+        std::string setCustomText(void);
 
         TextProgressBar();
 
@@ -28,14 +17,9 @@ namespace TaleOfTwoWastelandsUI {
         override void onPaint(PaintEventArgs e);
 
     private:
-        //Property to hold the custom text
-        string _m_customText;
+        // Property to hold the custom text
+        std::string _m_customText;
 
-        float m_valueF
-        {
-            get { return Value; }
-        }
-
-
+        float m_valueF;
     }
 }

@@ -8,45 +8,57 @@ namespace TaleOfTwoWastelandsUI {
         this.openDialog = openDialog;
         this.saveDialog = saveDialog;
 
-        Fallout3Path = TryAllStoresGetPath("Fallout3");
-        FalloutNVPath = TryAllStoresGetPath("FalloutNV");
-        TTWSavePath = TryAllStoresGetPath("TaleOfTwoWastelands");
+        m_fallout3Path = TryAllStoresGetPath("Fallout3");
+        m_falloutNVPath = TryAllStoresGetPath("FalloutNV");
+        m_ttwSavePath = TryAllStoresGetPath("TaleOfTwoWastelands");
     }
 
     void promptPaths() {
         Log.File("Looking for Fallout3.exe");
-        if (File.Exists(Path.Combine(Fallout3Path, "Fallout3.exe")))
+        if (File.Exists(Path.Combine(m_fallout3Path, "Fallout3.exe")))
             Log.File("\tFound.");
         else
-            Fallout3Path = Fallout3Prompt();
+            m_fallout3Path = Fallout3Prompt();
 
         Log.File("Looking for FalloutNV.exe");
-        if (File.Exists(Path.Combine(FalloutNVPath, "FalloutNV.exe")))
+        if (File.Exists(Path.Combine(m_falloutNVPath, "FalloutNV.exe")))
             Log.File("\tFound.");
         else
-            FalloutNVPath = FalloutNVPrompt();
+            m_falloutNVPath = FalloutNVPrompt();
 
         Log.File("Looking for Tale of Two Wastelands");
-        if (TTWSavePath != null && TTWSavePath != "\\")
+        if (m_ttwSavePath != null && TTWSavePath != "\\")
             Log.File("\tDefault path found.");
         else
-            TTWSavePath = TTWPrompt();
+            m_ttwSavePath = TTWPrompt();
+    }
+
+    std::string getFO3Path(void) {
+        return m_fallout3Path;
+    }
+
+    std::string getFNVPath(void) {
+        return m_falloutNVPath;
+    }
+
+    std::string getTTWSavePath(void) {
+        return m_ttwSavePath;
     }
 
     string fallout3Prompt(bool manual = false) {
         openDialog.FilterIndex = 1;
         openDialog.Title = Localization.Fallout3;
-        return (Fallout3Path = FindByUserPrompt(openDialog, Localization.Fallout3, "Fallout3", manual));
+        return (m_fallout3Path = FindByUserPrompt(openDialog, Localization.Fallout3, "Fallout3", manual));
     }
 
     string falloutNVPrompt(bool manual = false) {
         openDialog.FilterIndex = 2;
         openDialog.Title = Localization.FalloutNewVegas;
-        return (FalloutNVPath = FindByUserPrompt(openDialog, Localization.FalloutNewVegas, "FalloutNV", manual));
+        return (m_falloutNVPath = FindByUserPrompt(openDialog, Localization.FalloutNewVegas, "FalloutNV", manual));
     }
 
     string ttwPrompt(bool manual = false) {
-        return (TTWSavePath = FindByUserPrompt(saveDialog, "Tale of Two Wastelands", "TaleOfTwoWastelands", manual));
+        return (m_ttwSavePath = FindByUserPrompt(saveDialog, "Tale of Two Wastelands", "TaleOfTwoWastelands", manual));
     }
 
     bool overwritePrompt(string name, string path) {

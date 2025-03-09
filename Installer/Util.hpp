@@ -7,14 +7,14 @@ namespace TaleOfTwoWastelands {
 /* VESTIGIAL MACRO
  *  #region GetMD5 overloads
  */
-        static uint8_t getMD5(std::string file);
-        static uint8_t getMD5(std::ostringstream stream);
-        static uint8_t getMD5(uint8_t buf);
-        static std::string makeMD5String(uint8_t md5);
-        static uint8_t fromMD5String(std::string md5Str);
+        static uint8_t[] getMD5(std::string file);
+        static uint8_t[] getMD5(std::ostringstream stream);
+        static uint8_t[] getMD5(uint8_t[] buf);
+        static std::string makeMD5String(uint8_t[] md5);
+        static uint8_t[] fromMD5String(std::string md5Str);
         static std::string getMD5String(std::string file);
         static std::string getMD5String(std::ostringstream stream);
-        static std::string getMD5String(uint8_t buf);
+        static std::string getMD5String(uint8_t[] buf);
 /* VESTIGIAL MACRO
  *  #endregion
  */
@@ -25,7 +25,7 @@ namespace TaleOfTwoWastelands {
  */
         static IDictionary<std::string, std::string> readOldDatabase(std::string path);
 
-        static IEnumerable<Tuple<std::string, uint8_t>> findAlternateVersions(std::string file);
+        static IEnumerable<Tuple<std::string, uint8_t[]>> findAlternateVersions(std::string file);
 #endif
 /* VESTIGIAL MACRO
  *  #endregion

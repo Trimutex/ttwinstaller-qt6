@@ -1,31 +1,35 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelandsUI {
     // NOTE: public class
 	class Prompts : IPrompts {
     public:
-		string m_fallout3Path { get; private set; }
-		string m_falloutNVPath { get; private set; }
-		string m_ttwSavePath { get; private set; }
-
 		Prompts(OpenFileDialog openDialog, SaveFileDialog saveDialog, ILog log, IEnumerable<IPathStore> store);
 		void promptPaths();
-		string fallout3Prompt(bool manual = false);
-		string falloutNVPrompt(bool manual = false);
-		string ttwPrompt(bool manual = false);
-		bool overwritePrompt(string name, string path);
-		bool buildPrompt(string name, string path);
+        std::string getFO3Path(void);
+        std::string getFNVPath(void);
+        std::string getTTWSavePath(void);
+        std::string fallout3Prompt(bool manual = false);
+		std::string falloutNVPrompt(bool manual = false);
+		std::string ttwPrompt(bool manual = false);
+		bool overwritePrompt(std::string name, std::string path);
+		bool buildPrompt(std:;string name, std::string path);
 	    bool buildFOMODsPrompt();
-		ErrorPromptResult patchingErrorPrompt(string file);
+		ErrorPromptResult patchingErrorPrompt(std::string file);
 
     private:
         // NOTE: read-only block
 		FileDialog m_openDialog, m_saveDialog;
 		ILog m_log;
 		IEnumerable<IPathStore> m_stores;
+        std::string m_fallout3Path;
+        std::string m_falloutNVPath;
+        std::string m_ttwSavePath;
 
-		string tryAllStoresGetPath(string key);
-		bool tryAllStoresSetPath(string key, string path);
-		string findByUserPrompt(FileDialog dialog, string name, string keyName, bool manual = false);
+        std::string tryAllStoresGetPath(std::string key);
+		bool tryAllStoresSetPath(std::string key, string path);
+        std::string findByUserPrompt(FileDialog dialog, std::string name, std::string keyName, bool manual = false);
 	}
 }

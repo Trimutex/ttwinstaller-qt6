@@ -1,8 +1,7 @@
 #pragma once
 #include <optional>
 
-namespace TaleOfTwoWastelandsInstall
-{
+namespace TaleOfTwoWastelandsInstall {
 	class BuildBsasStep : IInstallStep {
     public:
 		BuildBsasStep(IInstaller installer, IPrompts prompts) :

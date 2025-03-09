@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <sstream>
+#include <string>
 
 namespace TaleOfTwoWastelandsPatching {
     // NOTE: public class
@@ -8,34 +11,35 @@ namespace TaleOfTwoWastelandsPatching {
         enum ChecksumType : byte {
             Murmur128,
             Md5
-        }
-        uint m_filesize { get; private set; }
-        byte[] m_checksum { get { return _computeChecksum.Value; } }
+        };
+
+        unsigned m_filesize { get; private set; }
+        uint8_t[] m_checksum { get { return _computeChecksum.Value; } }
         ChecksumType m_type { get; private set; }
 
         // NOTE: read-only block
-        Stream _stream;
+        std::ostringstream _stream;
 
-        Lazy<byte[]> _computeChecksum;
+        Lazy<uint8_t[]> _computeChecksum;
 
-        FileValidation(byte[] data, ChecksumType type = ChecksumType.Murmur128);
-        FileValidation(Stream stream, ChecksumType type = ChecksumType.Murmur128);
-        FileValidation(byte[] checksum, uint filesize, ChecksumType type = ChecksumType.Murmur128);
+        FileValidation(uint8_t[] data, ChecksumType type = ChecksumType.Murmur128);
+        FileValidation(std::ostringstream stream, ChecksumType type = ChecksumType.Murmur128);
+        FileValidation(uint8_t[] checksum, unsigned filesize, ChecksumType type = ChecksumType.Murmur128);
 
-        FileValidation(string path, ChecksumType type = ChecksumType.Murmur128)
+        FileValidation(std::string path, ChecksumType type = ChecksumType.Murmur128)
             : this(File.OpenRead(path), type) { };
 
         ~FileValidation();
         void dispose();
-        override string toString();
+        override std::string toString();
         override bool equals(object obj);
-        bool equals(FileValidation obj)
-        static bool operator ==(FileValidation a, FileValidation b)
-        static bool operator !=(FileValidation a, FileValidation b)
-        static Dictionary<string, FileValidation> fromBSA(BSA bsa)
-        static FileValidation fromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128)
-        static FileValidation readFrom(BinaryReader reader)
-        static void writeTo(BinaryWriter writer, FileValidation fv)
+        bool equals(FileValidation obj);
+        static bool operator ==(FileValidation a, FileValidation b);
+        static bool operator !=(FileValidation a, FileValidation b);
+        static std::map<std::string, FileValidation> fromBSA(BSA bsa);
+        static FileValidation fromBSAFile(BSAFile file, ChecksumType asType = ChecksumType.Murmur128);
+        static FileValidation readFrom(BinaryReader reader);
+        static void writeTo(BinaryWriter writer, FileValidation fv);
 
     protected:
         virtual void dispose(bool disposing);
@@ -46,8 +50,8 @@ namespace TaleOfTwoWastelandsPatching {
  */
         static extern int memcmp(byte[] b1, byte[] b2, UIntPtr count);
 
-        FileValidation(BinaryReader reader, byte typeByte);
-        void setContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type);
+        FileValidation(BinaryReader reader, uint8_t typeByte);
+        void setContents(Func<uint8_t[]> getChecksum, unsigned filesize, ChecksumType type);
         void writeTo(BinaryWriter writer);
         HashAlgorithm getHash();
     }

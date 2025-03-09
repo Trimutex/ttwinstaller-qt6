@@ -1,12 +1,13 @@
 #pragma once
 
+#include <optional>
 #include <string>
 
 namespace TaleOfTwoWastelandsInstall {
     // NOTE: originally internal
     class NVSE {
     public:
-        NVSE(string FNVPath, ILog log) : _m_fnvPath(FNVPath), m_log(log) {};
+        NVSE(std::string FNVPath, ILog log) : _m_fnvPath(FNVPath), m_log(log) {};
 
         bool check(void);
         std::optional<bool> prompt(void);

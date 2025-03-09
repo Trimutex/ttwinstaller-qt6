@@ -1,10 +1,12 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelands {
     // NOTE: sealed class
     class FinalizedTextWriter : TextWriter {
     public:
-        FinalizedTextWriter(string path);
+        FinalizedTextWriter(std::string path);
 
         override void write(char[] buffer, int index, int count);
 
@@ -18,7 +20,7 @@ namespace TaleOfTwoWastelands {
 
         string m_checksum;
 
-        byte[] updateChecksum(char[] s);
+        uint8_t[] updateChecksum(char[] s);
 
         bool _m_writingChecksum;
     }

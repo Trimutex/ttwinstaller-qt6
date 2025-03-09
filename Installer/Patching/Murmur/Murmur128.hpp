@@ -6,15 +6,15 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
     // NOTE: originally abstract
     class Murmur128 : HashAlgorithm {
     public:
-        uint seed(void);
+        unsigned seed(void);
         static Murmur128 createMurmur(void);
 
     protected:
-        Murmur128(uint seed) : _m_seed(seed);
+        Murmur128(unsigned seed) : _m_seed(seed);
 
     private:
         // TODO: read-only block
-        uint _m_seed;
+        unsigned _m_seed;
 
     };
 }

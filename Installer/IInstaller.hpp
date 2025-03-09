@@ -1,14 +1,16 @@
 #pragma once
 
+#include <string>
+
 namespace TaleOfTwoWastelands {
     // NOTE: public class
     // NOTE: interface class
 	class IInstaller {
     public:
-		string m_dirFO3Data { get; }
-		string m_dirFNVData { get; }
-		string m_dirTTWMain { get; }
-		string m_dirTTWOptional { get; }
+        std::string m_dirFO3Data { get; }
+		std::string m_dirFNVData { get; }
+		std::string m_dirTTWMain { get; }
+		std::string m_dirTTWOptional { get; }
 
 		/// <summary>
 		/// Provides progress updates for minor operations

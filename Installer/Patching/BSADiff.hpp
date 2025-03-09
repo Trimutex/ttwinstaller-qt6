@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 // TODO: parallel defined here
 namespace TaleOfTwoWastelandsPatching {
 	using TaleOfTwoWastelands.Properties;
@@ -10,10 +13,10 @@ namespace TaleOfTwoWastelandsPatching {
         BsaDiff(IInstaller installer, ILog log)
             : _m_installer(installer), m_log(log) {};
 
-        bool patchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false)
-        static IEnumerable<Tuple<string, string, string>> createRenameQuery(BSA bsa, IDictionary<string, string> renameDict);
+        bool patchBsa(CompressionOptions bsaOptions, std::string oldBSA, std::string newBSA, bool simulate = false)
+        static IEnumerable<Tuple<std::string, std::string, std::string>> createRenameQuery(BSA bsa, std::map<std::string, std::string> renameDict);
         bool patchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk);
-        void renameFiles(BSA bsa, IDictionary<string, string> renameDict);
+        void renameFiles(BSA bsa, std::map<std::string, std::string> renameDict);
 
     protected:
         IProgress<InstallStatus> getProgress(void);

@@ -4,20 +4,20 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
     class Murmur128UnmanagedX64 : Murmur128 {
     public:
         // NOTE: originally internal
-        internal Murmur128UnmanagedX64(uint seed = 0);
+        internal Murmur128UnmanagedX64(unsigned seed = 0);
 
         override void initialize(void);
 
     protected:
-        override void hashCore(byte[] array, int ibStart, int cbSize);
-        override byte[] hashFinal(void);
+        override void hashCore(uint8_t[] array, int ibStart, int cbSize);
+        override uint8_t[] hashFinal(void);
 
     private:
         // NOTE: originally internal
-        const ulong m_c1 = 0x87c37b91114253d5UL;
-        const ulong m_c2 = 0x4cf5ad432745937fUL;
-        ulong m_h1 { get; set; }
-        ulong m_h2 { get; set; }
+        const unsigned long m_c1 = 0x87c37b91114253d5UL;
+        const unsigned long m_c2 = 0x4cf5ad432745937fUL;
+        unsigned long m_h1 { get; set; }
+        unsigned long m_h2 { get; set; }
         int m_length { get; set; }
 
 /* VESTIGIAL MACRO
@@ -26,7 +26,7 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
  *  #endif
  */
         // NOTE: originally unsafe
-        void tail(byte* tail, int remaining);
+        void tail(uint8_t* tail, int remaining);
         void reset(void);
 
 /* VESTIGIAL MACRO
@@ -34,7 +34,7 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
  *      [MethodImpl(MethodImplOptions.AggressiveInlining)]
  *  #endif
  */
-        void body(byte[] data, int start, int length);
+        void body(uint8_t[] data, int start, int length);
 
     }
 }
