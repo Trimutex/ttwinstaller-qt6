@@ -9,11 +9,11 @@ namespace TaleOfTwoWastelands {
                     Environment.Is64BitOperatingSystem ? "Software\\Wow6432Node" : "Software", RegistryKeyPermissionCheck.ReadWriteSubTree)) {
             //create or retrieve BethSoft path
             Debug.Assert(bethKey != null, "bethKey != null");
-            return bethKey.CreateSubKey("Bethesda Softworks", RegistryKeyPermissionCheck.ReadWriteSubTree);
+            return bethKey.createSubKey("Bethesda Softworks", RegistryKeyPermissionCheck.ReadWriteSubTree);
         }
     }
 
-    string getPathFromKey(string keyName) {
+    std::string getPathFromKey(std::string keyName) {
         using (var bethKey = GetBethKey())
             using (var subKey = bethKey.CreateSubKey(keyName)) {
                 Debug.Assert(subKey != null, "subKey != null");
@@ -21,7 +21,7 @@ namespace TaleOfTwoWastelands {
             }
     }
 
-    void setPathFromKey(string keyName, string path) {
+    void setPathFromKey(std::string keyName, std::string path) {
         throw new InvalidOperationException("Registry writes are disabled");
     }
 }

@@ -47,7 +47,7 @@ namespace TaleOfTwoWastelandsProgress {
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
         void IProgress<T>.report(T value) {
-            OnReport(value);
+            onReport(value);
         }
 
         /// <summary>Invokes the action and event callbacks.</summary>

@@ -5,7 +5,7 @@ namespace TaleOfTwoWastelandsInstall {
     std::optional<bool> CheckingRequiredFilesStep::run(IInstallStatusUpdate status, CancellationToken token) {
 			status.CurrentOperation = Localization.CheckingRequiredFiles;
 
-			if (CheckFiles()) {
+			if (checkFiles()) {
 				Log.File("All files found.");
 				Log.Display("All files found. Proceeding with installation.");
 				return true;
@@ -21,8 +21,8 @@ namespace TaleOfTwoWastelandsInstall {
         Log.Dual(Localization.CheckingRequiredFiles);
 
         foreach (var esm in Game.CheckedESMs) {
-            var ttwESM = Path.Combine(_installer.DirTTWMain, esm);
-            var dataESM = Path.Combine(_installer.DirFO3Data, esm);
+            var ttwESM = Path.Combine(_m_installer.DirTTWMain, esm);
+            var dataESM = Path.Combine(_m_installer.DirFO3Data, esm);
             if (!File.Exists(ttwESM) && !File.Exists(dataESM)) {
                 Log.Dual(Localization.FileDoesNotExist, esm);
                 fileCheck = false;
@@ -35,7 +35,7 @@ namespace TaleOfTwoWastelandsInstall {
                                 select sb)) {
             //Key = TTW BSA
             //Value = string[] of FO3 sub-BSAs
-            var pathedSubBSA = Path.Combine(_installer.DirFO3Data, subBSA);
+            var pathedSubBSA = Path.Combine(_m_installer.DirFO3Data, subBSA);
             if (!File.Exists(pathedSubBSA)) {
                 Log.Dual(Localization.FileDoesNotExist, subBSA);
                 fileCheck = false;

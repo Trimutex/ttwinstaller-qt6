@@ -45,23 +45,23 @@ namespace TaleOfTwoWastelandsUI {
         return m_ttwSavePath;
     }
 
-    string fallout3Prompt(bool manual = false) {
+    std::string fallout3Prompt(bool manual = false) {
         openDialog.FilterIndex = 1;
         openDialog.Title = Localization.Fallout3;
         return (m_fallout3Path = FindByUserPrompt(openDialog, Localization.Fallout3, "Fallout3", manual));
     }
 
-    string falloutNVPrompt(bool manual = false) {
+    std::string falloutNVPrompt(bool manual = false) {
         openDialog.FilterIndex = 2;
         openDialog.Title = Localization.FalloutNewVegas;
         return (m_falloutNVPath = FindByUserPrompt(openDialog, Localization.FalloutNewVegas, "FalloutNV", manual));
     }
 
-    string ttwPrompt(bool manual = false) {
+    std::string ttwPrompt(bool manual = false) {
         return (m_ttwSavePath = FindByUserPrompt(saveDialog, "Tale of Two Wastelands", "TaleOfTwoWastelands", manual));
     }
 
-    bool overwritePrompt(string name, string path) {
+    bool overwritePrompt(std::string name, std::string path) {
         if (!File.Exists(path)) {
             Log.File(Localization.FileDoesNotExist, path);
             return true;
@@ -83,7 +83,7 @@ namespace TaleOfTwoWastelandsUI {
         return false;
     }
 
-    bool buildPrompt(string name, string path) {
+    bool buildPrompt(std::string name, std::string path) {
         if (!OverwritePrompt(name, path))
             return false;
 
@@ -98,7 +98,7 @@ namespace TaleOfTwoWastelandsUI {
                     Localization.BuildFOMODsQuestion, MessageBoxButtons.YesNo) == DialogResult.Yes;
     }
 
-    ErrorPromptResult patchingErrorPrompt(string file) {
+    ErrorPromptResult patchingErrorPrompt(std::string file) {
         var promptResult = MessageBox.Show(string.Format(Localization.ErrorWhilePatching, file), Localization.Error, MessageBoxButtons.AbortRetryIgnore);
         switch (promptResult) {
             //case DialogResult.Abort: //Quit install
@@ -113,14 +113,14 @@ namespace TaleOfTwoWastelandsUI {
         return ErrorPromptResult.Abort;
     }
 
-    string tryAllStoresGetPath(string key) {
+    std::string tryAllStoresGetPath(std::string key) {
         return (from store in Stores
                 let val = store.GetPathFromKey(key)
                 select val)
             .FirstOrDefault(v => !string.IsNullOrEmpty(v));
     }
 
-    bool tryAllStoresSetPath(string key, string path) {
+    bool tryAllStoresSetPath(std::string key, std::string path) {
         foreach (var store in Stores) {
             try {
                 store.SetPathFromKey(key, path);
@@ -133,7 +133,7 @@ namespace TaleOfTwoWastelandsUI {
         return false;
     }
 
-    string findByUserPrompt(FileDialog dialog, string name, string keyName, bool manual = false) {
+    std::string findByUserPrompt(FileDialog dialog, std::string name, std::string keyName, bool manual = false) {
         Log.File("Prompting user for {0}'s path.", name);
         MessageBox.Show(string.Format("Please select {0}'s location.", name));
 

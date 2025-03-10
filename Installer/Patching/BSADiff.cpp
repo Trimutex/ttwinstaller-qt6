@@ -2,7 +2,7 @@
 
 namespace TaleOfTwoWastelandsPatching {
 
-    bool patchBsa(CompressionOptions bsaOptions, string oldBSA, string newBSA, bool simulate = false) {
+    bool patchBsa(CompressionOptions bsaOptions, std::string oldBSA, std::string newBSA, bool simulate = false) {
         var Op = new InstallStatus(Progress, Token) { ItemsTotal = 7 };
 
         var outBsaFilename = Path.GetFileNameWithoutExtension(newBSA);
@@ -90,11 +90,8 @@ namespace TaleOfTwoWastelandsPatching {
  */
             var patchPath = Path.Combine(Installer.PatchDir, Path.ChangeExtension(outBsaFilename, ".pat"));
             if (File.Exists(patchPath))
-            {
                 patchDict = new PatchDict(patchPath);
-            }
-            else
-            {
+            else {
                 m_log.Dual("\tNo patch database is available for: " + oldBSA);
                 return false;
             }
@@ -102,35 +99,24 @@ namespace TaleOfTwoWastelandsPatching {
 /* VESTIGIAL MACRO
  *  #endif
  */
-        }
-        finally
-        {
-            Op.Step();
-        }
+        } catch ( ... ) { }
+        Op.step();
 
-        using (bsa)
-        {
-            try
-            {
+        using (bsa) {
+            try {
                 RenameFiles(bsa, renameDict);
 
-                if (renameDict.Count > 0)
-                {
-                    foreach (var kvp in renameDict)
-                    {
+                if (renameDict.Count > 0) {
+                    foreach (var kvp in renameDict) {
                         m_log.Dual("File not found: " + kvp.Value);
                         m_log.Dual("\tCannot create: " + kvp.Key);
                     }
                 }
-            }
-            finally
-            {
-                Op.Step();
-            }
+            } catch ( ... ) { }
+            Op.step();
 
             var allFiles = bsa.SelectMany(folder => folder).ToList();
-            try
-            {
+            try {
                 var opChk = new InstallStatus(Progress, Token) { ItemsTotal = patchDict.Count };
 
                 var joinedPatches = from patKvp in patchDict
@@ -143,8 +129,7 @@ namespace TaleOfTwoWastelandsPatching {
  *  #if DEBUG
  */
                 var watch = new Stopwatch();
-                try
-                {
+                try {
                     watch.Start();
 
 /* VESTIGIAL MACRO
@@ -176,24 +161,17 @@ namespace TaleOfTwoWastelandsPatching {
 /* VESTIGIAL MACRO
  *  #if DEBUG
  */
-                }
-                finally
-                {
-                    watch.Stop();
-                    Debug.WriteLine(outBsaFilename + " HandleFile loop finished in " + watch.Elapsed);
-                }
+                } catch ( ... ) { }
+                watch.stop();
+                Debug.WriteLine(outBsaFilename + " HandleFile loop finished in " + watch.Elapsed);
 
 /* VESTIGIAL MACRO
  *  #endif
  */
-            }
-            finally
-            {
-                Op.Step();
-            }
+            } catch ( ... ) { }
+            Op.step();
 
-            try
-            {
+            try {
                 Op.CurrentOperation = "Removing unnecessary files";
 
                 var notIncluded = allFiles.Where(file => !patchDict.ContainsKey(file.Filename));
@@ -204,31 +182,24 @@ namespace TaleOfTwoWastelandsPatching {
 
                 var emptyFolders = bsa.Where(folder => folder.Count == 0).ToList();
                 emptyFolders.ForEach(folder => bsa.Remove(folder));
-            }
-            finally
-            {
-                Op.Step();
-            }
+            } catch ( ... ) { }
+            Op.step();
 
-            try
-            {
+            try {
                 Op.CurrentOperation = "Saving " + Path.GetFileName(newBSA);
 
                 if (!simulate)
                     bsa.Save(newBSA.ToLowerInvariant());
-            }
-            finally
-            {
-                Op.Step();
-            }
+            } catch ( ... ) { }
+            Op.step();
         }
 
-        Op.Finish();
+        Op.finish();
 
         return true;
     }
 
-    static IEnumerable<Tuple<string, string, string>> createRenameQuery(BSA bsa, IDictionary<string, string> renameDict) {
+    static IEnumerable<Tuple<std::string, std::string, std::string>> createRenameQuery(BSA bsa, std::map<std::string, std::string> renameDict) {
         //TODO: use dict union
         var renameGroup = from folder in bsa
             from file in folder
@@ -258,18 +229,16 @@ namespace TaleOfTwoWastelandsPatching {
     bool patchBsaFile(BSAFile bsaFile, PatchInfo patch, FileValidation targetChk) {
         //InflaterInputStream won't let the patcher seek it,
         //so we have to perform a new allocate-and-copy
-        byte[]
-            inputBytes = bsaFile.GetContents(true),
+        uint8_t[]
+            inputBytes = bsaFile.getContents(true),
                        outputBytes;
 
         FileValidation outputChk;
 
-        var success = patch.PatchBytes(inputBytes, targetChk, out outputBytes, out outputChk);
-        using (outputChk)
-        {
-            if (success)
-            {
-                bsaFile.UpdateData(outputBytes, false);
+        var success = patch.patchBytes(inputBytes, targetChk, out outputBytes, out outputChk);
+        using (outputChk) {
+            if (success) {
+                bsaFile.updateData(outputBytes, false);
                 return true;
             }
 
@@ -278,7 +247,7 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-    void renameFiles(BSA bsa, IDictionary<string, string> renameDict) {
+    void renameFiles(BSA bsa, std::map<std::string, std::string> renameDict) {
         const string opPrefix = "Renaming BSA files";
 
         var opRename = new InstallStatus(Progress, Token) { CurrentOperation = opPrefix };

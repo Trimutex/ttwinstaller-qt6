@@ -1,60 +1,53 @@
 ﻿#include "InstallStatus.hpp"
 
 namespace TaleOfTwoWastelandsProgress {
-    CancellationToken m_token {
-        get { return _token; }
+    CancellationToken getToken(void) {
+        return _m_token;
     }
 
-    int m_itemsDone {
-        get
-        {
-            return _itemsDone;
-        }
-        set
-        {
-            if (_itemsDone != value)
-            {
-                _itemsDone = value;
-                Update();
-            }
-        }
+    int getItemsDone(void) {
+        return _m_itemsDone;
     }
 
-    int m_itemsTotal {
-        get
-        {
-            return _itemsTotal;
-        }
-        set
-        {
-            if (_itemsTotal != value) {
-                _itemsTotal = value;
-                Update();
-            }
-        }
+    void setItemsDone(int itemsDone) {
+        if (_m_itemsDone == itemsDone)
+            return;
+        _m_itemsDone = itemsDone;
+        update();
     }
 
-    string m_currentOperation {
-        get
-        {
-            return _currentOperation;
-        }
-        set
-        {
-            if (_currentOperation != value) {
-                _currentOperation = value;
-                update();
-            }
-        }
+    int getItemsTotal(void) {
+        return _m_itemsTotal;
     }
 
-    InstallStatus(IProgress<InstallStatus> progress, CancellationToken? token = null) {
-        _token = token ?? CancellationToken.None;
-        _progress = progress;
+    int setItemsTotal(int itemsTotal) {
+        if (_m_itemsTotal == itemsTotal)
+            return;
+        _m_itemsTotal = itemsTotal;
+        update();
+    }
+
+    std::string getCurrentOperation(void) {
+        return _m_currentOperation;
+    }
+
+    void setCurrentOperation(std::string currentOperation) {
+        if (_m_currentOperation == currentOperation)
+            return;
+        _m_currentOperation = currentOperation;
+        update();
+    }
+
+    InstallStatus(IProgress<InstallStatus> progress, std::optional<CancellationToken> token = null) {
+        if (token)
+            _m_token = token;
+        else
+            _m_token = CancellationToken.None;
+        _m_progress = progress;
     }
 
     int step() {
-        var itemsDone = Interlocked.Increment(ref _itemsDone);
+        var itemsDone = Interlocked.Increment(ref _m_itemsDone);
         if (itemsDone > ItemsTotal)
             throw new ArgumentOutOfRangeException();
 
@@ -63,9 +56,9 @@ namespace TaleOfTwoWastelandsProgress {
     }
 
     void finish() {
-        _itemsDone = 0;
-        _itemsTotal = 0;
-        _currentOperation = "";
+        _m_itemsDone = 0;
+        _m_itemsTotal = 0;
+        _m_currentOperation = "";
         update();
     }
 

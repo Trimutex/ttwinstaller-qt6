@@ -26,8 +26,9 @@ namespace TaleOfTwoWastelands {
         static IDictionary<std::string, std::string> readOldDatabase(std::string path);
 
         static IEnumerable<Tuple<std::string, uint8_t[]>> findAlternateVersions(std::string file);
-#endif
+
 /* VESTIGIAL MACRO
+ *  #endif
  *  #endregion
  */
 

@@ -27,11 +27,11 @@ namespace TaleOfTwoWastelandsPatching {
             writer.Write(0U);
     }
 
-    bool patchBytes(byte[] inputBytes, FileValidation targetChk, out byte[] outputBytes, out FileValidation outputChk) {
+    bool patchBytes(uint8_t[] inputBytes, FileValidation targetChk, out uint8_t[] outputBytes, out FileValidation outputChk) {
         using (var output = new MemoryStream()) {
             // NOTE: originally unsafe
-            fixed (byte* pInput = inputBytes)
-                fixed (byte* pPatch = Data)
+            fixed (uint8_t* pInput = inputBytes)
+                fixed (uint8_t* pPatch = Data)
                 Diff.Apply(pInput, inputBytes.LongLength, pPatch, Data.LongLength, output);
 
             outputBytes = output.ToArray();
@@ -43,9 +43,9 @@ namespace TaleOfTwoWastelandsPatching {
         }
     }
 
-    bool patchStream(Stream input, FileValidation targetChk, Stream output, out FileValidation outputChk) {
+    bool patchStream(std::ostringstream input, FileValidation targetChk, std::ostringstream output, out FileValidation outputChk) {
         // NOTE: originally unsafe
-        fixed (byte* pPatch = Data)
+        fixed (uint8_t* pPatch = Data)
             Diff.Apply(input, pPatch, Data.LongLength, output);
 
         output.Seek(0, SeekOrigin.Begin);

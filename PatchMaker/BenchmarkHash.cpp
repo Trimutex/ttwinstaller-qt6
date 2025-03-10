@@ -9,7 +9,7 @@ namespace PatchMaker {
         List<long> timeAdler = new List<long>(iterations);
         List<long> timeMd5 = new List<long>(iterations);
 
-        byte[] randBytes = new byte[testSize];
+        uint8_t[] randBytes = new uint8_t[testSize];
         var rnd = new Random();
 
         var watchMurmur = new Stopwatch();

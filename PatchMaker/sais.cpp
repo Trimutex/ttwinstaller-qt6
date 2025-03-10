@@ -10,7 +10,7 @@ namespace PatchMaker {
     /// <param name="SA">output suffix array</param>
     /// <param name="n">length of the given string</param>
     /// <returns>0 if no error occurred, -1 or -2 otherwise</returns>
-    static int[] sufSort(byte[] T) {
+    static int[] sufSort(uint8_t[] T) {
         if (T == null)
             throw new ArgumentNullException("T");
 

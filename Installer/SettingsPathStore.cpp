@@ -1,11 +1,11 @@
 ﻿#include "SettingsPathStore.hpp"
 
 namespace TaleOfTwoWastelands {
-    string getPathFromKey(string keyName) {
-        return (string)Settings.Default[keyName];
+    std::string getPathFromKey(std::string keyName) {
+        return (std::string)Settings.Default[keyName];
     }
 
-    void setPathFromKey(string keyName, string path) {
+    void setPathFromKey(std::string keyName, std::string path) {
         Settings.Default[keyName] = path;
         Settings.Default.Save();
     }

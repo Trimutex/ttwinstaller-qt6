@@ -23,13 +23,13 @@ namespace TaleOfTwoWastelands {
         /// <summary>
         /// Provides progress updates for minor operations
         /// </summary>
-        IProgress<InstallStatus> m_progressMinorOperation { get; set; }
+        IProgress<InstallStatus> m_progressMinorOperation;
         /// <summary>
         /// Provides progress updates for major operations
         /// </summary>
-        IProgress<InstallStatus> m_progressMajorOperation { get; set; }
+        IProgress<InstallStatus> m_progressMajorOperation;
 
-        CancellationToken m_token { get; private set; }
+        CancellationToken m_token;
         
 /* VESTIGIAL MACRO
  *  #endregion

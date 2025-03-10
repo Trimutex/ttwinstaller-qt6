@@ -1,31 +1,29 @@
 ﻿#include "Log.hpp"
+#include <chrono>
 
 namespace TaleOfTwoWastelands {
-
-    IProgress<std::string> DisplayMessage { get; set; }
-
-    void file(std::string msg, params object[] args) {
+    void Log::file(std::string msg, params object[] args) {
         Trace.Write(timestamp());
         Trace.WriteLine(string.Format(msg, args));
     }
 
-    void display(std::string msg, params object[] args) {
-        Debug.Assert(DisplayMessage != null, "shouldn't call Display before setting DisplayMessage");
+    void Log::display(std::string msg, params object[] args) {
+        Debug.Assert(m_displayMessage != null, "shouldn't call Display before setting DisplayMessage");
 
-        var displayProg = DisplayMessage;
+        var displayProg = m_displayMessage;
         if (displayProg != null) {
             var sb = timestamp() + msg + args;
             displayProg.Report(sb.ToString());
         }
     }
 
-    void dual(std::string msg, params object[] args) {
-        File(msg, args);
-        Display(msg, args);
+    void Log::dual(std::string msg, params object[] args) {
+        file(msg, args);
+        display(msg, args);
     }
 
-    std::string timestamp(void) {
+    std::string Log::timestamp(void) {
         // TODO: use actual current time
-        return "[" + DateTime.Now + "]\t";
+        return "[" + std::chrono::system_clock::now() + "]\t";
     }
 }

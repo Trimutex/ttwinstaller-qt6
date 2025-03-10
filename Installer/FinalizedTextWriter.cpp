@@ -1,7 +1,7 @@
 ﻿#include "FinalizedTextWriter.hpp"
 
 namespace TaleOfTwoWastelands {
-    FinalizedTextWriter(string path) {
+    FinalizedTextWriter(std::string path) {
         _stream = File.OpenWrite(path);
         _checksumSize = Encoding.GetByteCount(Checksum);
     }
@@ -33,11 +33,11 @@ namespace TaleOfTwoWastelands {
         get { return Encoding.UTF8; }
     }
 
-    string m_checksum {
+    std::string m_checksum {
         get { return _checksum.Value.ToString("X8"); }
     }
 
-    byte[] updateChecksum(char[] s) {
+    uint8_t[] updateChecksum(char[] s) {
         var messageBytes = Encoding.GetBytes(s);
         _checksum.Update(messageBytes);
 

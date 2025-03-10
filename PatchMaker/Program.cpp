@@ -45,7 +45,7 @@ namespace PatchMaker {
     }
 
     // NOTE: originally unsafe
-    static byte[] getDiff(string diffPath, long convertSignature = -1, bool moveToUsed = false) {
+    static byte[] getDiff(std::string diffPath, long convertSignature = -1, bool moveToUsed = false) {
         if (File.Exists(diffPath)) {
             try {
                 var diffBytes = File.ReadAllBytes(diffPath);
@@ -62,12 +62,12 @@ namespace PatchMaker {
         return null;
     }
 
-    static void buildBsaPatch(string inBsaName, string outBsaName) {
-        string outBSAFile = Path.ChangeExtension(outBsaName, ".bsa");
-        string outBSAPath = Path.Combine(_dirTTWMain, outBSAFile);
+    static void buildBsaPatch(std::string inBsaName, std::string outBsaName) {
+        std::string outBSAFile = Path.ChangeExtension(outBsaName, ".bsa");
+        std::string outBSAPath = Path.Combine(_dirTTWMain, outBSAFile);
 
-        string inBSAFile = Path.ChangeExtension(inBsaName, ".bsa");
-        string inBSAPath = Path.Combine(_dirFO3Data, inBSAFile);
+        std::string inBSAFile = Path.ChangeExtension(inBsaName, ".bsa");
+        std::string inBSAPath = Path.Combine(_dirFO3Data, inBSAFile);
 
         var renameDict = BuildRenameDict(outBsaName);
         Debug.Assert(renameDict != null);
@@ -151,7 +151,7 @@ namespace PatchMaker {
             }
     }
 
-    static IDictionary<string, string> buildRenameDict(string bsaName) {
+    static std::map<std::string, std::string> buildRenameDict(std::string bsaName) {
         var dictPath = Path.Combine(InDir, "TTW Patches", bsaName, "RenameFiles.dict");
         if (File.Exists(dictPath)) {
             var renameDict = Util.ReadOldDatabase(dictPath);
@@ -170,10 +170,10 @@ namespace PatchMaker {
             return renameDict;
         }
 
-        return new Dictionary<string, string>();
+        return new std::map<std::string, std::string>();
     }
 
-    static void buildMasterPatch(string esm, ILookup<string, string> knownEsmVersions) {
+    static void buildMasterPatch(std::string esm, ILookup<std::string, std::string> knownEsmVersions) {
         var fixPath = Path.Combine(OutDir, Path.ChangeExtension(esm, ".pat"));
         if (File.Exists(fixPath))
             return;

@@ -12,6 +12,15 @@ namespace TaleOfTwoWastelandsProgress {
         int m_itemsTotal;
         std::string m_currentOperation;
         InstallStatus(IProgress<InstallStatus> progress, std::optional<CancellationToken> token = null);
+
+        CancellationToken getToken(void);
+        int getItemsDone(void);
+        void setItemsDone(int itemsDone);
+        int getItemsTotal(void);
+        int setItemsTotal(int itemsTotal);
+        std::string getCurrentOperation(void);
+        void setCurrentOperation(std::string currentOperation);
+
         int step();
         void finish();
 

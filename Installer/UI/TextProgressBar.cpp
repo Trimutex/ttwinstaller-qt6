@@ -9,7 +9,7 @@ namespace TaleOfTwoWastelandsUI {
             if (_m_customText == value)
                 return;
             _m_customText = value;
-            Invalidate();
+            invalidate();
         }
 
         TextProgressBar() {
@@ -26,13 +26,10 @@ namespace TaleOfTwoWastelandsUI {
             var g = e.Graphics;
 
             var clip = new Rectangle(rect.X, rect.Y, (int)Math.Round((ValueF / Maximum) * rect.Width), rect.Height);
-            if (ProgressBarRenderer.IsSupported)
-            {
+            if (ProgressBarRenderer.IsSupported) {
                 ProgressBarRenderer.DrawHorizontalBar(g, rect);
                 ProgressBarRenderer.DrawHorizontalChunks(g, clip);
-            }
-            else
-            {
+            } else {
                 g.FillRegion(Brushes.ForestGreen, new Region(clip));
             }
 

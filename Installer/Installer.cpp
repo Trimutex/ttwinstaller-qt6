@@ -152,7 +152,7 @@ namespace TaleOfTwoWastelands {
             status.Step();   
         }
 
-        bool showSkipDialog(string description) {
+        bool showSkipDialog(std::string description) {
             switch (MessageBox.Show(string.Format(Localization.AlreadyExistOverwritePrompt, description), Localization.OverwriteFiles, MessageBoxButtons.YesNo)) {
                 case DialogResult.Yes:
                     return false;
@@ -250,7 +250,7 @@ namespace TaleOfTwoWastelands {
             return true;
         }
 
-        void FalloutLineCopy(string name, string path) {
+        void FalloutLineCopy(std::string name, std::string path) {
             bool skipExisting = false, asked = false;
 
             Log.Dual("Copying " + name + "...");
@@ -282,12 +282,12 @@ namespace TaleOfTwoWastelands {
             Log.Dual("\tDone.");
         }
 
-        static bool CheckExisting(string path, FileValidation newChk) {
+        static bool CheckExisting(std::string path, FileValidation newChk) {
             using (var existingChk = new FileValidation(path, newChk.Type))
                 return newChk == existingChk;
         }
 
-        bool PatchMaster(string esm) {
+        bool PatchMaster(std::string esm) {
             Log.Dual("Patching " + esm + "...");
 
             var patchPath = Path.Combine(PatchDir, Path.ChangeExtension(esm, ".pat"));
@@ -345,7 +345,7 @@ namespace TaleOfTwoWastelands {
             return false;
         }
 
-        void Fail(string msg = null) {
+        void Fail(std::string msg = null) {
             if (msg != null)
                 Log.Dual(msg);
             Log.Dual("Install aborted.");

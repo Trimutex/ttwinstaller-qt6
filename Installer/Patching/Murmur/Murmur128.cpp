@@ -1,7 +1,7 @@
 ﻿#include "Murmur128.hpp"
 
 namespace TaleOfTwoWastelandsPatchingMurmur {
-    uint seed(void) {
+    unsigned seed(void) {
         return _m_seed;
     }
 

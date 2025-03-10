@@ -6,11 +6,11 @@ namespace TaleOfTwoWastelandsPatching {
         SevenZipCompressor.LzmaDictionarySize = LZMA_DICTSIZE_ULTRA;
     }
 
-    static Stream getEncodingStream(Stream stream, long signature, bool output) {
+    static std::ostringstream getEncodingStream(std::ostringstream stream, long signature, bool output) {
         switch (signature) {
             case SIG_LZDIFF41:
                 if (output) {
-                    SetCompressionLevel();
+                    setCompressionLevel();
                     return new LzmaEncodeStream(stream);
                 }
                 return new LzmaDecodeStream(stream);
@@ -35,16 +35,16 @@ namespace TaleOfTwoWastelandsPatching {
     /// the patch to be opened concurrently.</param>
     /// <param name="output">A <see cref="Stream"/> to which the patched data is written.</param>
     // NOTE: originally unsafe
-    static void apply(byte* pInput, long length, byte* pPatch, long patchLength, Stream output) {
-        Stream controlStream, diffStream, extraStream;
-        var newSize = CreatePatchStreams(pPatch, patchLength, out controlStream, out diffStream, out extraStream);
+    static void apply(uint8_t* pInput, long length, uint8_t* pPatch, long patchLength, std::ostringstream output) {
+        std::ostringstream controlStream, diffStream, extraStream;
+        var newSize = createPatchStreams(pPatch, patchLength, out controlStream, out diffStream, out extraStream);
 
         // prepare to read three parts of the patch in parallel
-        ApplyInternal(newSize, new UnmanagedMemoryStream(pInput, length), controlStream, diffStream, extraStream, output);
+        applyInternal(newSize, new UnmanagedMemoryStream(pInput, length), controlStream, diffStream, extraStream, output);
     }
 
     // NOTE: originally unsafe
-    static long createPatchStreams(byte* pPatch, long patchLength, out Stream ctrl, out Stream diff, out Stream extra) {
+    static long createPatchStreams(uint8_t* pPatch, long patchLength, out std::ostringstream ctrl, out std::ostringstream diff, out std::ostringstream extra) {
         Func<long, long, Stream> openPatchStream = (u_offset, u_length) =>
             new UnmanagedMemoryStream(pPatch + u_offset, u_length > 0 ? u_length : patchLength - u_offset);
 
@@ -88,7 +88,7 @@ namespace TaleOfTwoWastelandsPatching {
         return newSize;
     }
 
-    static void applyInternal(long newSize, Stream input, Stream ctrl, Stream diff, Stream extra, Stream output) {
+    static void applyInternal(long newSize, std::ostringstream input, std::ostringstream ctrl, std::ostringstream diff, std::ostringstream extra, std::ostringstream output) {
         long addSize, copySize, seekAmount;
 
         using (ctrl)
@@ -140,7 +140,7 @@ namespace TaleOfTwoWastelandsPatching {
     }
 
     // NOTE: originally unsafe
-    static long readInt64(byte* pb) {
+    static long readInt64(uint8_t* pb) {
         long y = pb[7] & 0x7F;
         y <<= 8; y += pb[6];
         y <<= 8; y += pb[5];
@@ -153,8 +153,8 @@ namespace TaleOfTwoWastelandsPatching {
         return (pb[7] & 0x80) != 0 ? -y : y;
     }
 
-    static long readInt64(Stream ps) {
-        var buf = new byte[sizeof(long)];
+    static long readInt64(std::ostringstream ps) {
+        var buf = new uint8_t[sizeof(long)];
         if (ps.Read(buf, 0, sizeof(long)) != sizeof(long))
             throw new InvalidOperationException("Could not read long from stream");
 

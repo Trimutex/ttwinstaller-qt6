@@ -6,7 +6,7 @@ namespace TaleOfTwoWastelands {
     // NOTE: internal class
     class Log : ILog {
     public:
-        IProgress<std::string> m_displayMessage { get; set; }
+        IProgress<std::string> m_displayMessage;
         
         void file(std::string msg, params object[] args);
         void display(std::string msg, params object[] args);

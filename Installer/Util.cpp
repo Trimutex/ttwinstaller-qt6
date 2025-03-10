@@ -5,31 +5,31 @@ namespace TaleOfTwoWastelands {
 /* VESTIGIAL MACRO
  *  #region GetMD5 overloads
  */
-        // NOTE: byte[] is an 8-bit **unsigned** integer
+        // NOTE: byte is an 8-bit **unsigned** integer
         // TODO: Replace ComputeHash() and co to openssl library
         //       ... also add openssl library
-        static byte[] getMD5(string file) {
+        static uint8_t[] getMD5(std::string file) {
             using (var stream = File.OpenRead(file))
-                return GetMD5(stream);
+                return getMD5(stream);
         }
 
-        static byte[] getMD5(Stream stream) {
+        static uint8_t[] getMD5(Stream stream) {
             using (var fileHash = MD5.Create())
             using (stream)
                 return fileHash.ComputeHash(stream);
         }
 
-        static byte[] getMD5(byte[] buf) {
+        static uint8_t[] getMD5(uint8_t[] buf) {
             using (var fileHash = MD5.Create())
                 return fileHash.ComputeHash(buf);
         }
 
-        static string makeMD5String(byte[] md5) {
+        static string makeMD5String(uint8_t[] md5) {
             return BitConverter.ToString(md5).Replace("-", "");
         }
 
-        static byte[] fromMD5String(string md5Str) {
-            byte[] data = new byte[md5Str.Length / 2];
+        static uint8_t[] fromMD5String(std::string md5Str) {
+            uint8_t[] data = new uint8_t[md5Str.Length / 2];
             for (int i = 0; i < data.Length; i++)
                 data[i] = Convert.ToByte(md5Str.Substring(i * 2, 2), 16);
 
@@ -37,15 +37,15 @@ namespace TaleOfTwoWastelands {
         }
 
         static string getMD5String(string file) {
-            return MakeMD5String(GetMD5(file));
+            return MakeMD5String(getMD5(file));
         }
 
         static string getMD5String(Stream stream) {
-            return MakeMD5String(GetMD5(stream));
+            return MakeMD5String(getMD5(stream));
         }
 
         static string getMD5String(byte[] buf) {
-            return MakeMD5String(GetMD5(buf));
+            return MakeMD5String(getMD5(buf));
         }
         
 /* VESTIGIAL MACRO
@@ -58,16 +58,16 @@ namespace TaleOfTwoWastelands {
 /* VESTIGIAL MACRO
  *  #if LEGACY || DEBUG
  */
-        static IDictionary<string, string> readOldDatabase(string path) {
+        static std::map<std::string, std::string> readOldDatabase(std::string path) {
             Debug.Assert(File.Exists(path));
 
             using (var stream = File.OpenRead(path))
-                return (IDictionary<string, string>)new BinaryFormatter().Deserialize(stream);
+                return (std::map<std::string, std::string>)new BinaryFormatter().Deserialize(stream);
         }
 
         // NOTE: simple iteration over a non-generic collection
-        //      tldr; enumeration over tuples of string && byte[]
-        static IEnumerable<Tuple<string, byte[]>> findAlternateVersions(string file) {
+        //      tldr; enumeration over tuples of std::string && uint8_t[]
+        static IEnumerable<Tuple<std::string, uint8_t[]>> findAlternateVersions(std::string file) {
             var justName = Path.GetFileName(file);
             var split = justName.Split('.');
             split[split.Length - 3] = "*";
@@ -91,15 +91,16 @@ namespace TaleOfTwoWastelands {
  */
 
         // NOTE: std::string value was originally `this string value`
-        //      Does this even matter?
-        static string truncate(std::string value, int maxLength) {
-            if (string.IsNullOrEmpty(value)) return value;
+        //      Does having `this` even matter?
+        static std::string truncate(std::string value, int maxLength) {
+            if (value.empty())
+                return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
 
         // NOTE: std::string result was originally `out string result`
         //      Why the need for extra return?
-        static bool patternSearch(Stream inStream, string pattern, std::string result) {
+        static bool patternSearch(std::ostringstream inStream, std::string pattern, std::string result) {
             if (!inStream.CanRead)
                 throw new ArgumentException("Stream must be readable");
 
@@ -139,15 +140,15 @@ namespace TaleOfTwoWastelands {
             return found;
         }
 
-        static void copyFolder(string inFolder, string destFolder) {
+        static void copyFolder(std::string inFolder, std::string destFolder) {
             Directory.CreateDirectory(destFolder);
 
-            foreach (string folder in Directory.EnumerateDirectories(inFolder, "*", SearchOption.AllDirectories)) {
+            foreach (std::string folder in Directory.EnumerateDirectories(inFolder, "*", SearchOption.AllDirectories)) {
                 var justFolder = folder.Replace(inFolder, "").TrimStart(Path.DirectorySeparatorChar);
                 Directory.CreateDirectory(Path.Combine(destFolder, justFolder));
             }
 
-            foreach (string file in Directory.EnumerateFiles(inFolder, "*", SearchOption.AllDirectories)) {
+            foreach (std::string file in Directory.EnumerateFiles(inFolder, "*", SearchOption.AllDirectories)) {
                 var justFile = file.Replace(inFolder, "").TrimStart(Path.DirectorySeparatorChar);
 
                 try {

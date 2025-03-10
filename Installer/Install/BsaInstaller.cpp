@@ -2,8 +2,7 @@
 
 CompressionOptions BSAInstaller::getOptionsOrDefault(std::string inBSA) {
     CompressionOptions bsaOptions;
-    if (BSAOptions.TryGetValue(inBsa, out bsaOptions))
-    {
+    if (BSAOptions.TryGetValue(inBsa, out bsaOptions)) {
         if (bsaOptions.ExtensionCompressionLevel.Count == 0)
             bsaOptions.ExtensionCompressionLevel = DefaultBSAOptions.ExtensionCompressionLevel;
         if (bsaOptions.Strategy == CompressionStrategy.Safe)
@@ -13,8 +12,8 @@ CompressionOptions BSAInstaller::getOptionsOrDefault(std::string inBSA) {
     return (bsaOptions) ? bsaOptions : DefaultBSAOptions;
 }
 
-ErrorPromptResult BSAInstaller::patch(CompressionOptions options, string inBsaFile,
-        string inBsaPath, string outBsaPath) {
+ErrorPromptResult BSAInstaller::patch(CompressionOptions options, std::string inBsaFile,
+        std::string inBsaPath, std::string outBsaPath) {
     bool patchSuccess;
 
 /* VESTIGIAL MACRO
@@ -51,19 +50,16 @@ ErrorPromptResult BSAInstaller::patch(CompressionOptions options, string inBsaFi
 }
 
 void BSAInstaller::extract(CancellationToken token, IEnumerable<BSAFolder> folders,
-        string outBsa, string outBsaPath, bool skipExisting) {
-    foreach (var folder in folders)
-    {
+        std::string outBsa, std::string outBsaPath, bool skipExisting) {
+    foreach (var folder in folders) {
         Directory.CreateDirectory(Path.Combine(outBsaPath, folder.Path));
         Log.File("Created " + folder.Path);
 
-        foreach (var file in folder)
-        {
+        foreach (var file in folder) {
             token.ThrowIfCancellationRequested();
 
             var filePath = Path.Combine(outBsaPath, file.Filename);
-            if (File.Exists(filePath) && skipExisting)
-            {
+            if (File.Exists(filePath) && skipExisting) {
                 Log.File("Skipped (already exists) " + file.Filename);
                 continue;
             }

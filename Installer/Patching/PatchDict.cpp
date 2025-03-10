@@ -2,7 +2,7 @@
 
 namespace TaleOfTwoWastelandsPatching {
 
-    void writeAll(Stream outStream) {
+    void writeAll(std::ostringstream outStream) {
         using (var writer = new BinaryWriter(outStream)) {
             writer.Write(Count);
             foreach (var kvp in this) {
@@ -16,7 +16,7 @@ namespace TaleOfTwoWastelandsPatching {
 /* VESTIGIAL MACRO
  *  #if LEGACY
  */
-    static PatchDict fromOldDatabase(IDictionary<string, string> oldDict, string prefix, Func<byte[], byte[]> convertPatch) {
+    static PatchDict fromOldDatabase(std::map<std::string, std::string> oldDict, std::string prefix, Func<uint8_t[], uint8_t[]> convertPatch) {
         Debug.Assert(oldDict != null);
         var patchDict = new PatchDict(oldDict.Count);
 

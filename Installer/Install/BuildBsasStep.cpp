@@ -9,12 +9,12 @@ namespace TaleOfTwoWastelandsInstall {
             //inBSA - KVP.Key
             //outBSA - KVP.Value
             var outBSA = kvp.Value;
-            string outBSAFile = Path.ChangeExtension(kvp.Value, ".bsa");
-            string outBSAPath = Path.Combine(_installer.DirTTWMain, outBSAFile);
+            std::string outBSAFile = Path.ChangeExtension(kvp.Value, ".bsa");
+            std::string outBSAPath = Path.Combine(_installer.DirTTWMain, outBSAFile);
 
             var inBSA = kvp.Key;
-            string inBSAFile = Path.ChangeExtension(kvp.Key, ".bsa");
-            string inBSAPath = Path.Combine(_installer.DirFO3Data, inBSAFile);
+            std::string inBSAFile = Path.ChangeExtension(kvp.Key, ".bsa");
+            std::string inBSAPath = Path.Combine(_installer.DirFO3Data, inBSAFile);
 
             ErrorPromptResult buildResult;
             try {

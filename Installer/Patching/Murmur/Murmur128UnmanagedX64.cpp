@@ -1,7 +1,7 @@
 ﻿#include "Murmur128UnmanagedX64.hpp"
 
 namespace TaleOfTwoWastelandsPatchingMurmur {
-    Murmur128UnmanagedX64::Murmur128UnmanagedX64(uint seed = 0) : base(seed) {
+    Murmur128UnmanagedX64::Murmur128UnmanagedX64(unsigned seed = 0) : base(seed) {
         Reset();
     }
 
@@ -9,13 +9,13 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         Reset();
     }
 
-    void Murmur128UnmanagedX64::hashCore(byte[] array, int ibStart, int cbSize) {
+    void Murmur128UnmanagedX64::hashCore(uint8_t[] array, int ibStart, int cbSize) {
         // store the length of the hash (for use later)
         Length += cbSize;
         Body(array, ibStart, cbSize);
     }
 
-    override byte[] Murmur128UnmanagedX64::hashFinal(void) {
+    override uint8_t[] Murmur128UnmanagedX64::hashFinal(void) {
         var len = (ulong)Length;
         H1 ^= len; H2 ^= len;
 
@@ -28,10 +28,10 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         H1 += H2;
         H2 += H1;
 
-        var result = new byte[16];
+        var result = new uint8_t[16];
         // NOTE: originally unsafe
-        fixed (byte* h = result) {
-            var r = (ulong*)h;
+        fixed (uint8_t* h = result) {
+            var r = (unsigned long*)h;
 
             r[0] = H1;
             r[1] = H2;
@@ -40,7 +40,7 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         return result;
     }
 
-    void Murmur128UnmanagedX64::tail(byte* tail, int remaining) {
+    void Murmur128UnmanagedX64::tail(uint8_t* tail, int remaining) {
         // create our keys and initialize to 0
         ulong k1 = 0, k2 = 0;
 
@@ -73,7 +73,7 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         Length = 0;
     }
 
-    void Murmur128UnmanagedX64::body(byte[] data, int start, int length) {
+    void Murmur128UnmanagedX64::body(uint8_t[] data, int start, int length) {
         if (length == 0)
             return;
 
@@ -81,8 +81,8 @@ namespace TaleOfTwoWastelandsPatchingMurmur {
         int blocks = length / 16;
 
         // NOTE: originally unsafe
-        fixed (byte* d = &data[start]) {
-            var current = (ulong*)d;
+        fixed (uint8_t* d = &data[start]) {
+            var current = (unsigned long*)d;
 
             while (blocks-- > 0) {
                 // a variant of original algorithm optimized for processor instruction pipelining

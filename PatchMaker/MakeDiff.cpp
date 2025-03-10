@@ -10,7 +10,7 @@ namespace PatchMaker {
         /// <param name="newData">The new binary data.</param>
         /// <param name="output">A <see cref="Stream"/> to which the patch will be written.</param>
         // NOTE: originally unsafe
-        static void create(byte[] oldBuf, byte[] newBuf, long signature, Stream output) {
+        static void create(uint8_t[] oldBuf, uint8_t[] newBuf, long signature, std::ostreamstring output) {
             // check arguments
             if (oldBuf == null)
                 throw new ArgumentNullException("oldData");
@@ -33,8 +33,8 @@ namespace PatchMaker {
                 32	??	Bzip2ed ctrl block
                 ??	??	Bzip2ed diff block
                 ??	??	Bzip2ed extra block */
-            byte[] header = new byte[HEADER_SIZE];
-            fixed (byte* pHead = header)
+            uint8_t[] header = new uint8_t[HEADER_SIZE];
+            fixed (uint8_t* pHead = header)
             {
                 WriteInt64(signature, pHead);
                 WriteInt64(newBuf.LongLength, pHead + 24);
@@ -44,12 +44,12 @@ namespace PatchMaker {
             output.Write(header, 0, header.Length);
 
             //backing for ctrl writes
-            byte[] buf = new byte[8];
+            uint8_t[] buf = new uint8_t[8];
             int[] bufI = SAIS.sufsort(oldBuf);
 
-            fixed (byte* oldData = oldBuf)
-            fixed (byte* newData = newBuf)
-            fixed (byte* pB = buf)
+            fixed (uint8_t* oldData = oldBuf)
+            fixed (uint8_t* newData = newBuf)
+            fixed (uint8_t* pB = buf)
             fixed (int* I = bufI)
             {
                 using (MemoryStream msControl = new MemoryStream())
@@ -135,7 +135,7 @@ namespace PatchMaker {
 
                                 //write diff string
                                 for (int i = 0; i < lenf; i++)
-                                    diffStream.WriteByte((byte)(newData[lastscan + i] - oldData[lastpos + i]));
+                                    diffStream.WriteByte((uint8_t)(newData[lastscan + i] - oldData[lastpos + i]));
 
                                 //write extra string
                                 var extraLength = (scan - lenb) - (lastscan + lenf);
@@ -163,7 +163,7 @@ namespace PatchMaker {
                     msControl.Seek(0, SeekOrigin.Begin);
                     msControl.CopyTo(output);
 
-                    fixed (byte* pHead = header)
+                    fixed (uint8_t* pHead = header)
                     {
                         // compute size of compressed ctrl data
                         WriteInt64(msControl.Length, &pHead[8]);
@@ -189,12 +189,12 @@ namespace PatchMaker {
             }
         }
 
-        static long readInt64(byte* buf) {
-            return Diff.ReadInt64(buf);
+        static long readInt64(uint8_t* buf) {
+            return Diff::readInt64(buf);
         }
 
         static Stream getEncodingStream(Stream stream, long signature, bool output) {
-            return Diff.GetEncodingStream(stream, signature, output);
+            return Diff::getEncodingStream(stream, signature, output);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace PatchMaker {
         /// </summary>
         // NOTE: originally unsafe
         // NOTE: internal function
-        static byte[] convertPatch(byte* pPatch, long length, long inputSig, long outputSig) {
+        static uint8_t[] convertPatch(uint8_t* pPatch, long length, long inputSig, long outputSig) {
             if (inputSig == outputSig)
                 throw new ArgumentException("output must be different from input");
 
@@ -223,12 +223,12 @@ namespace PatchMaker {
              extra block; seek forwards in oldfile by z bytes".
              */
 
-            byte[] header = new byte[HEADER_SIZE];
+            uint8_t[] header = new uint8_t[HEADER_SIZE];
             using (var inputStream = openPatchStream(0, HEADER_SIZE))
                 inputStream.Read(header, 0, HEADER_SIZE);
 
             long controlLength, diffLength, newSize;
-            fixed (byte* pHead = header)
+            fixed (uint8_t* pHead = header)
             {
                 // check for appropriate magic
                 long signature = ReadInt64(pHead);
@@ -244,7 +244,7 @@ namespace PatchMaker {
             if (controlLength < 0 || diffLength < 0 || newSize < 0)
                 throw new InvalidOperationException("Corrupt patch.");
 
-            byte[] outControlBytes, outDiffBytes, outExtraBytes;
+            uint8_t[] outControlBytes, outDiffBytes, outExtraBytes;
 
             using (MemoryStream
                 msControlStream = new MemoryStream(),
@@ -274,8 +274,8 @@ namespace PatchMaker {
 
             using (var msOut = new MemoryStream())
             {
-                var buf = new byte[8];
-                fixed (byte* pB = buf)
+                var buf = new uint8_t[8];
+                fixed (uint8_t* pB = buf)
                 {
                     WriteInt64(outputSig, pB);
                     msOut.Write(buf, 0, buf.Length);
@@ -301,7 +301,7 @@ namespace PatchMaker {
 
 
         // NOTE: originally unsafe
-        static int compareBytes(byte* left, int leftLength, byte* right, int rightLength) {
+        static int compareBytes(uint8_t* left, int leftLength, uint8_t* right, int rightLength) {
             int diff = 0;
             for (int i = 0; i < leftLength && i < rightLength; i++) {
                 diff = left[i] - right[i];
@@ -312,7 +312,7 @@ namespace PatchMaker {
         }
 
         // NOTE: originally unsafe
-        static int matchLength(byte* oldData, int oldLength, byte* newData, int newLength) {
+        static int matchLength(uint8_t* oldData, int oldLength, uint8_t* newData, int newLength) {
             int i;
             for (i = 0; i < oldLength && i < newLength; i++) {
                 if (oldData[i] != newData[i])
@@ -323,7 +323,7 @@ namespace PatchMaker {
         }
 
         // NOTE: originally unsafe
-        static int search(int* I, byte* oldData, int oldLength, byte* newData, int newLength, int newOffset, int start, int end, out int pos) {
+        static int search(int* I, uint8_t* oldData, int oldLength, uint8_t* newData, int newLength, int newOffset, int start, int end, out int pos) {
             if (end - start < 2) {
                 int startLength = MatchLength((oldData + I[start]), oldLength, (newData + newOffset), newLength);
                 int endLength = MatchLength((oldData + I[end]), oldLength, (newData + newOffset), newLength);
@@ -350,27 +350,27 @@ namespace PatchMaker {
      *  [MethodImpl(MethodImplOptions.AggressiveInlining)]
      */
         // NOTE: originally unsafe
-        static void writeInt64(long y, byte* pb) {
+        static void writeInt64(long y, uint8_t* pb) {
             if (y < 0) {
                 y = -y;
 
-                pb[0] = (byte)y;
-                pb[1] = (byte)(y >>= 8);
-                pb[2] = (byte)(y >>= 8);
-                pb[3] = (byte)(y >>= 8);
-                pb[4] = (byte)(y >>= 8);
-                pb[5] = (byte)(y >>= 8);
-                pb[6] = (byte)(y >>= 8);
-                pb[7] = (byte)((y >> 8) | 0x80);
+                pb[0] = (uint8_t)y;
+                pb[1] = (uint8_t)(y >>= 8);
+                pb[2] = (uint8_t)(y >>= 8);
+                pb[3] = (uint8_t)(y >>= 8);
+                pb[4] = (uint8_t)(y >>= 8);
+                pb[5] = (uint8_t)(y >>= 8);
+                pb[6] = (uint8_t)(y >>= 8);
+                pb[7] = (uint8_t)((y >> 8) | 0x80);
             } else {
-                pb[0] = (byte)y;
-                pb[1] = (byte)(y >>= 8);
-                pb[2] = (byte)(y >>= 8);
-                pb[3] = (byte)(y >>= 8);
-                pb[4] = (byte)(y >>= 8);
-                pb[5] = (byte)(y >>= 8);
-                pb[6] = (byte)(y >>= 8);
-                pb[7] = (byte)(y >> 8);
+                pb[0] = (uint8_t)y;
+                pb[1] = (uint8_t)(y >>= 8);
+                pb[2] = (uint8_t)(y >>= 8);
+                pb[3] = (uint8_t)(y >>= 8);
+                pb[4] = (uint8_t)(y >>= 8);
+                pb[5] = (uint8_t)(y >>= 8);
+                pb[6] = (uint8_t)(y >>= 8);
+                pb[7] = (uint8_t)(y >> 8);
             }
         }
 }

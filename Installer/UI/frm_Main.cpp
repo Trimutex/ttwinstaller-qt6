@@ -32,7 +32,7 @@ namespace TaleOfTwoWastelandsUI {
             bar.CustomText = opProg.CurrentOperation;
         }
 
-        void updateLog(string msg) {
+        void updateLog(std::string msg) {
             txt_Progress.AppendText(msg);
             txt_Progress.AppendText(Environment.NewLine);
         }

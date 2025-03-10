@@ -1,29 +1,29 @@
 ﻿#include "FileValidation.hpp"
 
 namespace TaleOfTwoWastelandsPatching {
-        FileValidation(byte[] data, ChecksumType type = ChecksumType.Murmur128) {
+        FileValidation(uint8_t[] data, ChecksumType type = ChecksumType.Murmur128) {
             if (data == null)
                 throw new ArgumentNullException("data");
 
             SetContents(() => {
                 using (var hash = GetHash())
                     return hash.ComputeHash(data);
-            }, (uint)data.LongLength, type);
+            }, (unsigned)data.LongLength, type);
         }
 
-        FileValidation(Stream stream, ChecksumType type = ChecksumType.Murmur128) {
+        FileValidation(std::ostringstream stream, ChecksumType type = ChecksumType.Murmur128) {
             if (stream == null)
                 throw new ArgumentNullException("stream");
 
             _stream = stream;
-            SetContents(() => {
+            setContents(() => {
                 using (stream)
                 using (var hash = GetHash())
                     return hash.ComputeHash(stream);
-            }, (uint)stream.Length, type);
+            }, (unsigned)stream.Length, type);
         }
 
-        FileValidation(byte[] checksum, uint filesize, ChecksumType type = ChecksumType.Murmur128) {
+        FileValidation(uint8_t[] checksum, unsigned filesize, ChecksumType type = ChecksumType.Murmur128) {
             if (checksum == null)
                 throw new ArgumentNullException("checksum");
             if (checksum.Length != 16)
@@ -32,24 +32,24 @@ namespace TaleOfTwoWastelandsPatching {
                 filesize = uint.MaxValue;
             //throw new ArgumentException("filesize must have a value");
 
-            SetContents(() => checksum, filesize, type);
+            setContents(() => checksum, filesize, type);
         }
 
         ~FileValidation() {
-            Dispose(false);
+            dispose(false);
         }
 
         void dispose() {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            dispose(true);
+            GC.suppressFinalize(this);
         }
 
-        override string toString() {
+        override std::string toString() {
             return string.Format("({0}, {1} bytes, {2})", BitConverter.ToString(Checksum), Filesize, Enum.GetName(typeof(ChecksumType), Type));
         }
 
         override bool equals(object obj) {
-            return Equals(obj as FileValidation);
+            return equals(obj as FileValidation);
         }
 
         bool equals(FileValidation obj) {
@@ -79,7 +79,7 @@ namespace TaleOfTwoWastelandsPatching {
             return !(a == b);
         }
 
-        static Dictionary<string, FileValidation> fromBSA(BSA bsa) {
+        static std::map<std::string, FileValidation> fromBSA(BSA bsa) {
             return bsa
                 .SelectMany(folder => folder)
                 .ToDictionary(file => file.Filename, file => FromBSAFile(file));
@@ -118,7 +118,7 @@ namespace TaleOfTwoWastelandsPatching {
  */
         static extern int memcmp(byte[] b1, byte[] b2, UIntPtr count);
 
-        FileValidation(BinaryReader reader, byte typeByte) {
+        FileValidation(BinaryReader reader, uint8_t typeByte) {
             Debug.Assert(typeByte != byte.MaxValue);
 
             var type = (ChecksumType)typeByte;
@@ -128,14 +128,14 @@ namespace TaleOfTwoWastelandsPatching {
             SetContents(() => checksum, filesize, type);
         }
 
-        void setContents(Func<byte[]> getChecksum, uint filesize, ChecksumType type) {
-            _computeChecksum = new Lazy<byte[]>(getChecksum);
+        void setContents(Func<uint8_t[]> getChecksum, unsigned filesize, ChecksumType type) {
+            _computeChecksum = new Lazy<uint8_t[]>(getChecksum);
             Filesize = filesize;
             Type = type;
         }
 
         void writeTo(BinaryWriter writer) {
-            writer.Write((byte)Type);
+            writer.Write((uint8_t)Type);
             writer.Write(Filesize);
             writer.Write(Checksum);
         }

@@ -6,15 +6,15 @@ BuildFOMODsStep(IInstaller installer, ILog log, IPrompts prompts)
     }
 
 std::optional<bool> run(IInstallStatusUpdate status, CancellationToken token) {
-    if (!_prompts.BuildFOMODsPrompt())
+    if (!_m_prompts.BuildFOMODsPrompt())
         return false;
 
     //+1 (opt)
     status.ItemsTotal++;
     status.CurrentOperation = "Building FOMODs";
 
-    var fomodStatus = new InstallStatus(_installer.ProgressMinorOperation, _installer.Token);
-    _fomod.BuildAll(fomodStatus, _installer.DirTTWMain, _installer.DirTTWOptional, _prompts.TTWSavePath);
+    var fomodStatus = new InstallStatus(_m_installer.ProgressMinorOperation, _m_installer.Token);
+    _m_fomod.BuildAll(fomodStatus, _m_installer.DirTTWMain, _m_installer.DirTTWOptional, _m_prompts.TTWSavePath);
 
     return true;
 }
