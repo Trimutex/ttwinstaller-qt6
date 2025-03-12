@@ -1,0 +1,9 @@
+[submodule "submodules/bsa"]
+	path = submodules/bsa
+	url = https://github.com/Ryan-rsm-McKenzie/bsa.git
+[submodule "submodules/bit7z"]
+	path = submodules/bit7z
+	url = https://github.com/rikyoz/bit7z.git
+[submodule "submodules/glaze"]
+	path = submodules/glaze
+	url = https://github.com/stephenberry/glaze.git

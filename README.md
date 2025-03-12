@@ -6,9 +6,17 @@ This is the development repository for the installer used in the [Tale of Two Wa
 > [!WARNING]
 > This fork of the project is not affiliated with the original developers.
 
+Dependencies
+------------
+- CMake
+- QT6
+- [Ryan-rsm-McKenzie::bsa](https://github.com/Ryan-rsm-McKenzie/bsa)
+- [rikyoz::bit7z](https://github.com/rikyoz/bit7z)
+- [stephenberry::glaze](https://github.com/stephenberry/glaze)
+
 Packages to be replaced:
-- BSAsharp          => [Ryan-rsm-McKenzie::bsa](https://github.com/Ryan-rsm-McKenzie/bsa)
-- Newtonsoft.Json   => [glaze](https://github.com/stephenberry/glaze)
+- BSAsharp          => bsa
+- Newtonsoft.Json   => bit7z
 - SevenZipSharp     => Already obsolete
-- SharpZipLib       => [bit7z](https://github.com/rikyoz/bit7z)
+- SharpZipLib       => glaze
 - structuremap      => Probably not needed
