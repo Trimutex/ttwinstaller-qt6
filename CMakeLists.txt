@@ -12,11 +12,16 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 #file(GLOB_RECURSE INSTALLER "src/Installer/*.cpp")
 #add_executable(installer ${INSTALLER})
-add_executable(installer src/Installer/Main.cpp src/Installer/Window.cpp)
+add_executable(installer
+    src/Installer/Main.cpp
+    src/Installer/Window.cpp
+    src/Installer/InputSection.cpp)
 target_link_libraries(installer PRIVATE Qt6::Widgets)
 
 #file(GLOB_RECURSE PATCHMAKER "src/PatchMaker/*.cpp")
 #add_executable(patchmaker ${PATCHMAKER})
-add_executable(patchmaker src/PatchMaker/Main.cpp src/PatchMaker/Window.cpp)
+add_executable(patchmaker
+    src/PatchMaker/Main.cpp
+    src/PatchMaker/Window.cpp)
 target_link_libraries(patchmaker PRIVATE Qt6::Widgets)
 
