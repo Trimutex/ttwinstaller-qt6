@@ -10,13 +10,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/submodules/bit7z)
+add_subdirectory(${CMAKE_SOURCE_DIR}/submodules/bsa)
+add_subdirectory(${CMAKE_SOURCE_DIR}/submodules/glaze)
 #file(GLOB_RECURSE INSTALLER "src/Installer/*.cpp")
 #add_executable(installer ${INSTALLER})
 add_executable(installer
     src/Installer/Main.cpp
     src/Installer/Window.cpp
     src/Installer/InputSection.cpp)
-target_link_libraries(installer PRIVATE Qt6::Widgets)
+target_link_libraries(installer PRIVATE Qt6::Widgets bit7z bsa glaze::glaze)
 
 #file(GLOB_RECURSE PATCHMAKER "src/PatchMaker/*.cpp")
 #add_executable(patchmaker ${PATCHMAKER})
