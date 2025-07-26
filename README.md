@@ -3,7 +3,7 @@ Tale of Two Wastelands Installer
 
 This is the development repository for the installer used in the [Tale of Two Wastelands](http://www.twowastelands.com/) mod.
 
-> [!ERROR]
+> [!CAUTION]
 > Due to this rewrite being based on the original old code and not the current active code, this rewrite is useless/won't work. As such development has been ceased and will not be continued. For an implementation of the original software look towards [Hoolamike](https://github.com/Niedzwiedzw/hoolamike).
 
 > [!WARNING]
